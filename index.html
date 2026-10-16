@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f8f6f1">
+    <meta name="description" content="Découvrez une sélection de vêtements modestes et élégants pour femme.">
+    <title>Tesettur Mode — La modestie, avec allure</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="announcement">Livraison offerte dès 80 € · Retours faciles sous 14 jours</div>
+
+    <header class="site-header">
+      <a class="brand" href="#" aria-label="Tesettur Mode, accueil">
+        <img class="brand-logo" src="logo-transparent.png" alt="">
+        <span>TESETTUR <span class="brand-light">MODE</span></span>
+      </a>
+      <label class="search">
+        <span class="sr-only">Rechercher un article</span>
+        <span aria-hidden="true">⌕</span>
+        <input id="search-input" type="search" placeholder="Rechercher un article…">
+      </label>
+      <button class="cart-trigger" id="open-cart" type="button" aria-label="Ouvrir le panier">
+        Panier <span class="cart-count" id="cart-count">0</span>
+      </button>
+    </header>
+
+    <section class="storefront-banner" aria-label="Notre boutique">
+      <img src="devanture-banniere-collage.jpg" alt="Devanture de Tesettür Mode au centre, entourée de photos des vêtements et de la vitrine">
+    </section>
+
+    <nav class="category-nav" aria-label="Catégories">
+      <a href="#collection">Nouvelle collection</a>
+      <a href="#collection" data-filter="Abayas">Abayas</a>
+      <a href="#collection" data-filter="Robes">Robes</a>
+      <a href="#collection" data-filter="Hijabs">Hijabs</a>
+      <a href="#collection" data-filter="Ensembles">Ensembles</a>
+    </nav>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <h1>La modestie,<br><em>avec allure.</em></h1>
+          <p class="hero-text">Des pièces pensées pour vous accompagner avec élégance, du quotidien aux grandes occasions.</p>
+          <a class="button button-dark" href="#collection">Découvrir la collection <span aria-hidden="true">↗</span></a>
+          <div class="hero-note"><span class="note-line"></span> Des essentiels choisis avec soin</div>
+        </div>
+      </section>
+
+      <section class="benefits" aria-label="Nos engagements">
+        <div><span>01</span><p>Des coupes confortables</p></div>
+        <div><span>02</span><p>Des matières sélectionnées</p></div>
+        <div><span>03</span><p>Livraison suivie</p></div>
+      </section>
+
+      <section class="collection" id="collection">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">LA SÉLECTION DU MOMENT</p>
+            <h2>Les pièces à aimer</h2>
+          </div>
+          <span id="result-count" class="result-count"></span>
+        </div>
+        <div class="filters" aria-label="Filtrer les articles">
+          <button class="filter-button active" type="button" data-filter="Tout">Tout voir</button>
+          <button class="filter-button" type="button" data-filter="Abayas">Abayas</button>
+          <button class="filter-button" type="button" data-filter="Robes">Robes</button>
+          <button class="filter-button" type="button" data-filter="Hijabs">Hijabs</button>
+          <button class="filter-button" type="button" data-filter="Ensembles">Ensembles</button>
+        </div>
+        <div class="product-grid" id="product-grid"></div>
+        <p class="empty-results" id="empty-results" hidden>Aucun article ne correspond à votre recherche.</p>
+      </section>
+
+      <section class="newsletter">
+        <p class="eyebrow">RESTONS EN CONTACT</p>
+        <h2>Une touche d'inspiration dans votre boîte mail.</h2>
+        <p>Inscrivez-vous pour découvrir les nouveautés et les prochaines collections.</p>
+        <form id="newsletter-form">
+          <label class="sr-only" for="newsletter-email">Votre adresse e-mail</label>
+          <input id="newsletter-email" type="email" placeholder="Votre adresse e-mail" required>
+          <button type="submit" aria-label="S'inscrire à la newsletter">S'inscrire <span aria-hidden="true">→</span></button>
+        </form>
+        <p class="form-message" id="newsletter-message" aria-live="polite"></p>
+      </section>
+    </main>
+
+    <section class="contact-section" id="contact" aria-labelledby="contact-title">
+      <div class="contact-intro">
+        <p class="eyebrow">RESTONS EN LIEN</p>
+        <h2 id="contact-title">Retrouvez-nous</h2>
+        <p>Suivez la boutique et partagez votre expérience.</p>
+      </div>
+      <div class="contact-grid">
+        <article class="contact-card">
+          <div class="contact-copy">
+            <p class="contact-label">INSTAGRAM</p>
+            <h3>Les nouveautés, au fil du jour</h3>
+            <p>Scannez le code ou retrouvez-nous sur Instagram.</p>
+            <a class="contact-link" href="https://www.instagram.com/tesettur.mode?utm_source=qr&amp;igsh=NWVxNmttcmgwbmJl" target="_blank" rel="noopener noreferrer">Voir Instagram <span aria-hidden="true">↗</span></a>
+          </div>
+          <a class="contact-qr" href="https://www.instagram.com/tesettur.mode?utm_source=qr&amp;igsh=NWVxNmttcmgwbmJl" target="_blank" rel="noopener noreferrer" aria-label="Ouvrir le compte Instagram de Tesettür Mode">
+            <img src="qr-instagram.png" alt="QR code Instagram de Tesettür Mode">
+          </a>
+        </article>
+        <article class="contact-card">
+          <div class="contact-copy">
+            <p class="contact-label">AVIS GOOGLE</p>
+            <h3>Votre avis compte</h3>
+            <p>Scannez le code pour partager votre expérience sur Google.</p>
+            <a class="contact-link" href="https://g.page/r/CVfy37vC4GAuECE/review" target="_blank" rel="noopener noreferrer">Donner mon avis <span aria-hidden="true">↗</span></a>
+          </div>
+          <a class="contact-qr" href="https://g.page/r/CVfy37vC4GAuECE/review" target="_blank" rel="noopener noreferrer" aria-label="Donner un avis Google à Tesettür Mode">
+            <img src="qr-google-avis.png" alt="QR code pour laisser un avis Google à Tesettür Mode">
+          </a>
+        </article>
+      </div>
+      <article class="contact-email">
+        <div>
+          <p class="contact-label">ÉCRIVEZ-NOUS</p>
+          <h3>Une question ? Contactez la boutique.</h3>
+        </div>
+        <a class="contact-link" href="mailto:contact.tesetturmode@gmail.com">contact.tesetturmode@gmail.com <span aria-hidden="true">↗</span></a>
+      </article>
+      <div class="contact-people" aria-label="Contacts de la boutique">
+        <article class="contact-person">
+          <h3>Gamer AVCI</h3>
+          <a href="tel:+33768032093">07 68 03 20 93</a>
+        </article>
+        <article class="contact-person">
+          <h3>Julie BRUGUIER-ROURE</h3>
+          <a href="tel:+33745656572">07 45 65 65 72</a>
+        </article>
+      </div>
+      <p class="contact-address">4 Rue d’Avéjan <span aria-hidden="true">·</span> 30100 Alès</p>
+    </section>
+
+    <footer class="site-footer">
+      <a class="brand footer-brand" href="#"><img class="brand-logo" src="logo-transparent.png" alt=""><span>TESETTUR <span class="brand-light">MODE</span></span></a>
+      <p>Une allure qui vous ressemble.</p>
+      <small>© <span id="year"></span> Tesettur Mode · Boutique de démonstration</small>
+    </footer>
+
+    <div class="cart-backdrop" id="cart-backdrop" hidden></div>
+    <aside class="cart-drawer" id="cart-drawer" aria-labelledby="cart-title" aria-hidden="true">
+      <div class="cart-heading">
+        <h2 id="cart-title">Votre panier <span id="drawer-count">(0)</span></h2>
+        <button class="close-cart" id="close-cart" type="button" aria-label="Fermer le panier">×</button>
+      </div>
+      <div class="cart-items" id="cart-items"></div>
+      <div class="cart-empty" id="cart-empty">Votre panier est encore vide.<br><a href="#collection" id="continue-shopping">Découvrir la collection</a></div>
+      <div class="cart-bottom">
+        <div class="subtotal"><span>Sous-total</span><strong id="cart-subtotal">0,00 €</strong></div>
+        <p>Frais de livraison calculés à l'étape suivante.</p>
+        <button class="button button-dark checkout-button" id="checkout-button" type="button" disabled>Continuer vers le paiement</button>
+        <p class="checkout-note" id="checkout-note" aria-live="polite">Le paiement en ligne sera activé après le choix d'une solution de paiement.</p>
+      </div>
+    </aside>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
