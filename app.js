@@ -1,13 +1,13 @@
 const products = [
-  { id: 1, name: "Sac à main camel", category: "Sacs", price: 59, label: "SAC", color: "#a9663f", background: "#f2e4d3", image: "sac-a-main-camel.jpeg" },
+  { id: 1, name: "Sac à main camel", category: "Accessoires", price: 59, label: "SAC", color: "#a9663f", background: "#f2e4d3", image: "sac-a-main-camel.jpeg" },
   { id: 2, name: "Bijoux dorés", category: "Bijoux", price: 29, label: "BIJOUX", color: "#b58a43", background: "#f2ead8", image: "bijoux-dores.jpeg" },
   { id: 3, name: "Ensemble maille écru", category: "Ensembles", price: 79, label: "NOUVEAUTÉ", color: "#b2a28b", background: "#f1e8dd", image: "ensemble-maille-ecru.jpeg" },
-  { id: 4, name: "Hijab rose poudré", category: "Hijabs", price: 19, label: "ESSENTIEL", color: "#c38b80", background: "#f3e3df", image: "hijab-rose-poudre.png" },
+  { id: 4, name: "Hijab rose poudré", category: "Hijab", price: 19, label: "ESSENTIEL", color: "#c38b80", background: "#f3e3df", image: "hijab-rose-poudre.png" },
   { id: 5, name: "Pantalon fluide noir", category: "Pantalons", price: 39, label: "ESSENTIEL", color: "#38312f", background: "#e9e4dc", image: "pantalon-fluide-noir.jpeg" },
   { id: 6, name: "Pull maille écru", category: "Pulls", price: 49, label: "DOUCEUR", color: "#c7b4a0", background: "#f1e7df", image: "pull-maille-ecru.jpeg" },
-  { id: 7, name: "Robe de soirée", category: "Robes", displayCategory: "Robe de soirée", price: 89, label: "OCCASION", color: "#d0b8a8", background: "#f3e5dc", image: "robe-soiree-perlee.jpeg" },
-  { id: 8, name: "Robe longue à pois", category: "Robes", price: 59, label: "COUP DE CŒUR", color: "#c7b49a", background: "#f0e7d9", image: "robe-longue-a-pois.jpeg" },
-  { id: 9, name: "Chemisier bordeaux", category: "Chemisiers", displayCategory: "Chemisier", price: 69, label: "NOUVEAUTÉ", color: "#743a46", background: "#f0e8e1", image: "ensemble-bordeaux-ivoire.jpeg" },
+  { id: 7, name: "Robe de soirée", category: "Robe de soirée", displayCategory: "Robe de soirée", price: 89, label: "OCCASION", color: "#d0b8a8", background: "#f3e5dc", image: "robe-soiree-perlee.jpeg" },
+  { id: 8, name: "Robe longue à pois", category: "Robe", displayCategory: "Robe", price: 59, label: "COUP DE CŒUR", color: "#c7b49a", background: "#f0e7d9", image: "robe-longue-a-pois.jpeg" },
+  { id: 9, name: "Chemisier bordeaux", category: "Chemisier", displayCategory: "Chemisier", price: 69, label: "NOUVEAUTÉ", color: "#743a46", background: "#f0e8e1", image: "ensemble-bordeaux-ivoire.jpeg" },
   { id: 10, name: "Jupe", category: "Jupe", price: 59, label: "NOUVEAUTÉ", color: "#342c2b", background: "#eee4d7", image: "jupe-longue-noire.png" },
   { id: 11, name: "Veste", category: "Veste", price: 79, label: "NOUVEAUTÉ", color: "#6685a3", background: "#e9e6df", image: "veste-longue-jean.png" }
 ];
@@ -21,6 +21,9 @@ const cartBackdrop = document.querySelector("#cart-backdrop");
 const cartItems = document.querySelector("#cart-items");
 const cartEmpty = document.querySelector("#cart-empty");
 const toast = document.querySelector("#toast");
+const categoryTrack = document.querySelector("#category-track");
+const previousCategoryButton = document.querySelector("#category-scroll-prev");
+const nextCategoryButton = document.querySelector("#category-scroll-next");
 let activeFilter = "Tout";
 let toastTimer;
 
@@ -30,6 +33,8 @@ const euro = (amount) => new Intl.NumberFormat("fr-FR", {
 }).format(amount);
 
 function renderProducts() {
+  if (!productGrid) return;
+
   const query = searchInput.value.trim().toLocaleLowerCase("fr");
   const visibleProducts = products.filter((product) => {
     const matchesCategory = activeFilter === "Tout" || product.category === activeFilter;
@@ -52,7 +57,6 @@ function renderProducts() {
   `).join("");
 
   emptyResults.hidden = visibleProducts.length !== 0;
-  document.querySelector("#result-count").textContent = `${visibleProducts.length} article${visibleProducts.length > 1 ? "s" : ""}`;
 }
 
 function renderCart() {
@@ -104,15 +108,6 @@ function setCartOpen(open) {
   if (open) document.querySelector("#close-cart").focus();
 }
 
-productGrid.addEventListener("click", (event) => {
-  const button = event.target.closest("[data-add]");
-  if (!button) return;
-  const id = Number(button.dataset.add);
-  cart.set(id, (cart.get(id) ?? 0) + 1);
-  renderCart();
-  showToast(`L’article « ${products.find((product) => product.id === id).name} » a été ajouté au panier.`);
-});
-
 cartItems.addEventListener("click", (event) => {
   const removeButton = event.target.closest("[data-remove]");
   if (removeButton) {
@@ -142,13 +137,19 @@ document.querySelectorAll("[data-filter]").forEach((button) => {
   button.addEventListener("click", (event) => {
     event.preventDefault();
     activeFilter = button.dataset.filter;
-    document.querySelectorAll(".filter-button").forEach((filter) => {
-      filter.classList.toggle("active", filter.dataset.filter === activeFilter);
-    });
     renderProducts();
     document.querySelector("#collection").scrollIntoView({ behavior: "smooth" });
   });
 });
+
+function scrollCategories(direction) {
+  const firstTile = categoryTrack.querySelector(".category-tile");
+  const gap = Number.parseFloat(getComputedStyle(categoryTrack).columnGap) || 0;
+  categoryTrack.scrollBy({ left: direction * (firstTile.getBoundingClientRect().width + gap), behavior: "smooth" });
+}
+
+previousCategoryButton.addEventListener("click", () => scrollCategories(-1));
+nextCategoryButton.addEventListener("click", () => scrollCategories(1));
 
 searchInput.addEventListener("input", renderProducts);
 document.querySelector("#checkout-button").addEventListener("click", () => {

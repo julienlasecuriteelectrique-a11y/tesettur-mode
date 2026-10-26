@@ -26,28 +26,13 @@
         Panier <span class="cart-count" id="cart-count">0</span>
       </button>
     </header>
-
-    <nav class="category-nav" aria-label="Catégories">
-      <a href="#collection" data-filter="Tout">Nouveautés</a>
-      <a href="#collection" data-filter="Sacs">Sacs</a>
-      <a href="#collection" data-filter="Bijoux">Bijoux</a>
-      <a href="#collection" data-filter="Ensembles">Ensembles</a>
-      <a href="#collection" data-filter="Jupe">Jupe</a>
-      <a href="#collection" data-filter="Chemisiers">Chemisiers</a>
-      <a href="#collection" data-filter="Hijabs">Hijabs</a>
-      <a href="#collection" data-filter="Pantalons">Pantalons</a>
-      <a href="#collection" data-filter="Pulls">Pulls</a>
-      <a href="#collection" data-filter="Robes">Robes</a>
-      <a href="#collection" data-filter="Veste">Veste</a>
-    </nav>
-
     <main>
       <section class="hero" aria-label="Collection mise en avant">
         <div class="hero-copy">
           <p class="eyebrow">LA NOUVELLE COLLECTION</p>
           <h1>La modestie,<br><em>avec allure.</em></h1>
           <p class="hero-text">Des pièces pensées pour vous accompagner avec élégance, du quotidien aux grandes occasions.</p>
-          <a class="button button-dark" href="#collection">Découvrir la collection <span aria-hidden="true">↗</span></a>
+          <a class="button button-dark" href="#category-track">Découvrir les catégories <span aria-hidden="true">↗</span></a>
           <div class="hero-note"><span class="note-line"></span> Des essentiels choisis avec soin</div>
         </div>
         <div class="hero-visual">
@@ -56,30 +41,23 @@
         </div>
       </section>
 
-      <section class="collection" id="collection">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">LA SÉLECTION DU MOMENT</p>
-            <h2>Les pièces à aimer</h2>
-          </div>
-          <span id="result-count" class="result-count"></span>
+      <nav class="category-carousel" aria-label="Catégories">
+        <button class="category-scroll" id="category-scroll-prev" type="button" aria-label="Voir les catégories précédentes"><span aria-hidden="true"></span></button>
+        <div class="category-track" id="category-track">
+          <div class="category-tile" style="--category-image: url('robe-longue-a-pois.jpeg')"><span>ROBE</span></div>
+          <div class="category-tile" style="--category-image: url('ensemble-maille-ecru.jpeg')"><span>ENSEMBLES</span></div>
+          <div class="category-tile" style="--category-image: url('veste-longue-jean.png')"><span>VESTE</span></div>
+          <div class="category-tile" style="--category-image: url('ensemble-bordeaux-ivoire.jpeg')"><span>CHEMISIER</span></div>
+          <div class="category-tile" style="--category-image: url('jupe-longue-noire.png')"><span>JUPE</span></div>
+          <div class="category-tile" style="--category-image: url('pull-maille-ecru.jpeg')"><span>PULLS</span></div>
+          <div class="category-tile" style="--category-image: url('pantalon-fluide-noir.jpeg')"><span>PANTALONS</span></div>
+          <div class="category-tile" style="--category-image: url('robe-soiree-perlee.jpeg')"><span>ROBE DE SOIRÉE</span></div>
+          <div class="category-tile" style="--category-image: url('hijab-rose-poudre.png')"><span>HIJAB</span></div>
+          <div class="category-tile" style="--category-image: url('sac-a-main-camel.jpeg')"><span>ACCESSOIRES</span></div>
+          <div class="category-tile" style="--category-image: url('bijoux-dores.jpeg')"><span>BIJOUX</span></div>
         </div>
-        <div class="filters" aria-label="Filtrer les articles">
-          <button class="filter-button active" type="button" data-filter="Tout">Tout voir</button>
-          <button class="filter-button" type="button" data-filter="Sacs">Sacs</button>
-          <button class="filter-button" type="button" data-filter="Bijoux">Bijoux</button>
-          <button class="filter-button" type="button" data-filter="Ensembles">Ensembles</button>
-          <button class="filter-button" type="button" data-filter="Jupe">Jupe</button>
-          <button class="filter-button" type="button" data-filter="Chemisiers">Chemisiers</button>
-          <button class="filter-button" type="button" data-filter="Hijabs">Hijabs</button>
-          <button class="filter-button" type="button" data-filter="Pantalons">Pantalons</button>
-          <button class="filter-button" type="button" data-filter="Pulls">Pulls</button>
-          <button class="filter-button" type="button" data-filter="Robes">Robes</button>
-                  <button class="filter-button" type="button" data-filter="Veste">Veste</button>
-        </div>
-        <div class="product-grid" id="product-grid"></div>
-        <p class="empty-results" id="empty-results" hidden>Aucun article ne correspond à votre recherche.</p>
-      </section>
+        <button class="category-scroll" id="category-scroll-next" type="button" aria-label="Voir les catégories suivantes"><span aria-hidden="true"></span></button>
+      </nav>
 
       <section class="newsletter">
         <p class="eyebrow">RESTONS EN CONTACT</p>
@@ -94,54 +72,48 @@
       </section>
     </main>
 
-    <section class="contact-section" id="contact" aria-labelledby="contact-title">
-      <div class="contact-intro">
-        <p class="eyebrow">RESTONS EN LIEN</p>
-        <h2 id="contact-title">Retrouvez-nous</h2>
-        <p>Suivez la boutique et partagez votre expérience.</p>
-      </div>
-      <div class="contact-grid">
-        <article class="contact-card">
-          <div class="contact-copy">
-            <p class="contact-label">INSTAGRAM</p>
-            <h3>Les nouveautés, au fil du jour</h3>
-            <p>Scannez le code ou retrouvez-nous sur Instagram.</p>
-            <a class="contact-link" href="https://www.instagram.com/tesettur.mode?utm_source=qr&amp;igsh=NWVxNmttcmgwbmJl" target="_blank" rel="noopener noreferrer">Voir Instagram <span aria-hidden="true">↗</span></a>
-          </div>
-          <a class="contact-qr" href="https://www.instagram.com/tesettur.mode?utm_source=qr&amp;igsh=NWVxNmttcmgwbmJl" target="_blank" rel="noopener noreferrer" aria-label="Ouvrir le compte Instagram de Tesettür Mode">
-            <img src="qr-instagram.png" alt="QR code Instagram de Tesettür Mode">
-          </a>
-        </article>
-        <article class="contact-card">
-          <div class="contact-copy">
-            <p class="contact-label">AVIS GOOGLE</p>
-            <h3>Votre avis compte</h3>
-            <p>Scannez le code pour partager votre expérience sur Google.</p>
-            <a class="contact-link" href="https://g.page/r/CVfy37vC4GAuECE/review" target="_blank" rel="noopener noreferrer">Donner mon avis <span aria-hidden="true">↗</span></a>
-          </div>
-          <a class="contact-qr" href="https://g.page/r/CVfy37vC4GAuECE/review" target="_blank" rel="noopener noreferrer" aria-label="Donner un avis Google à Tesettür Mode">
-            <img src="qr-google-avis.png" alt="QR code pour laisser un avis Google à Tesettür Mode">
-          </a>
-        </article>
-      </div>
-      <article class="contact-email">
-        <div>
-          <p class="contact-label">ÉCRIVEZ-NOUS</p>
-          <h3>Une question ? Contactez la boutique.</h3>
+      <div class="contact-inner">
+        <div class="contact-heading">
+          <p class="contact-kicker">TESETTÜR MODE · ALÈS</p>
+          <h2 id="contact-title">La boutique, à Alès</h2>
         </div>
-        <a class="contact-link" href="mailto:contact.tesetturmode@gmail.com" aria-label="Envoyer un e-mail à Tesettür Mode">Envoyer un e-mail <span aria-hidden="true">↗</span></a>
-      </article>
-      <div class="contact-people" aria-label="Contacts de la boutique">
-        <article class="contact-person">
-          <h3>Gamer AVCI</h3>
-          <a href="tel:+33768032093">07 68 03 20 93</a>
-        </article>
-        <article class="contact-person">
-          <h3>Julie BRUGUIER-ROURE</h3>
-          <a href="tel:+33745656572">07 45 65 65 72</a>
-        </article>
+        <div class="contact-details">
+          <div class="contact-item">
+            <p class="contact-label">TÉLÉPHONE</p>
+            <div class="contact-phone-entry">
+              <a href="tel:+33768032093">07 68 03 20 93</a>
+              <span class="contact-phone-name">Gamer AVCI</span>
+            </div>
+            <div class="contact-phone-entry">
+              <a href="tel:+33745656572">07 45 65 65 72</a>
+              <span class="contact-phone-name">Julie BRUGUIER-ROURE</span>
+            </div>
+          </div>
+          <div class="contact-item">
+            <p class="contact-label">E-MAIL</p>
+            <a href="mailto:contact.tesetturmode@gmail.com">contact.tesetturmode@gmail.com</a>
+          </div>
+          <div class="contact-item">
+            <p class="contact-label">EN LIGNE</p>
+            <div class="contact-socials">
+              <a class="contact-social" href="https://www.instagram.com/tesettur.mode/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Tesettür Mode" title="Instagram">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect x="3.25" y="3.25" width="17.5" height="17.5" rx="5" stroke="currentColor" stroke-width="1.7" />
+                  <circle cx="12" cy="12" r="4.1" stroke="currentColor" stroke-width="1.7" />
+                  <circle cx="17.55" cy="6.65" r="1.1" fill="currentColor" />
+                </svg>
+              </a>
+              <a class="contact-social" href="https://g.page/r/CVfy37vC4GAuECE/review" target="_blank" rel="noopener noreferrer" aria-label="Laisser un avis Google à Tesettür Mode" title="Avis Google">
+                <span class="google-mark" aria-hidden="true">G</span>
+              </a>
+            </div>
+          </div>
+          <div class="contact-item">
+            <p class="contact-label">ADRESSE</p>
+            <address>4 Rue d’Avéjan<br>30100 Alès</address>
+          </div>
+        </div>
       </div>
-      <p class="contact-address">4 Rue d’Avéjan <span aria-hidden="true">·</span> 30100 Alès</p>
     </section>
 
     <footer class="site-footer">
@@ -157,7 +129,7 @@
         <button class="close-cart" id="close-cart" type="button" aria-label="Fermer le panier">×</button>
       </div>
       <div class="cart-items" id="cart-items"></div>
-      <div class="cart-empty" id="cart-empty">Votre panier est encore vide.<br><a href="#collection" id="continue-shopping">Découvrir la collection</a></div>
+      <div class="cart-empty" id="cart-empty">Votre panier est encore vide.<br><a href="#category-track" id="continue-shopping">Voir les catégories</a></div>
       <div class="cart-bottom">
         <div class="subtotal"><span>Sous-total</span><strong id="cart-subtotal">0,00 €</strong></div>
         <p>Frais de livraison calculés à l'étape suivante.</p>
