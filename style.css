@@ -98,11 +98,14 @@ button { color: inherit; }
 #category-scroll-next { right: 6px; }
 
 .hero { position: relative; min-height: clamp(500px, 68vh, 760px); display: block; padding: 0; overflow: hidden; background: #e8d9d5; }
-.hero-copy { position: absolute; z-index: 2; top: 50%; left: max(6vw, 32px); width: min(420px, 36vw); margin: 0; padding: 15px 0; color: #342a2c; text-align: left; transform: translateY(-50%); }
+.hero-copy { position: absolute; z-index: 2; top: 50%; left: max(6vw, 32px); width: min(520px, 44vw); margin: 0; padding: 15px 0; color: #342a2c; text-align: left; transform: translateY(-50%); }
 .hero-copy .eyebrow { margin-bottom: 19px; }
 .hero-copy .eyebrow { color: #815965; }
 .eyebrow { margin: 0 0 18px; color: var(--olive); font-size: 9px; font-weight: 700; letter-spacing: .19em; }
 h1, h2 { font-family: "Playfair Display", Georgia, serif; font-weight: 500; }
+h1 { margin: 0; color: #342a2c; font-size: clamp(44px, 5.4vw, 70px); line-height: 1.04; letter-spacing: -.04em; }
+.hero-copy h1 { color: #342a2c; }
+h1 em { color: #815965; font-weight: 500; }
 .hero-copy h1 { color: #342a2c; }
 h1 em { color: #f1d8d3; font-weight: 500; }
 .hero-copy h1 em { color: #815965; }
@@ -117,7 +120,7 @@ h1 em { color: #f1d8d3; font-weight: 500; }
 .note-line { width: 30px; height: 1px; background: #a28e91; }
 .hero-visual { position: absolute; z-index: 0; inset: 0; overflow: hidden; background: #e8d9d5; }
 .hero-visual::after { display: none; }
-.hero-visual img { position: absolute; inset: 0 0 0 44%; display: block; width: 56%; height: 100%; object-fit: contain; object-position: right center; filter: brightness(.9) saturate(.92); }
+.hero-visual img { position: absolute; inset: 0 0 0 50%; display: block; width: 50%; height: 100%; object-fit: contain; object-position: right center; filter: brightness(.9) saturate(.92); }
 .hero-visual-label { position: absolute; z-index: 1; right: clamp(20px, 5vw, 64px); bottom: clamp(20px, 5vw, 56px); padding: 10px 14px; background: rgba(255, 254, 250, .92); color: #414437; font-size: 9px; letter-spacing: .12em; }
 
 .collection { padding: 92px max(8vw, 28px) 102px; }
