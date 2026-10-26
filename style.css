@@ -88,10 +88,10 @@ button { color: inherit; }
 .category-tile::after { background: linear-gradient(180deg, rgba(0, 0, 0, .28), transparent 34%); }
 .category-tile:hover::before { transform: scale(1.035); }
 .category-tile span { position: relative; margin: 13px 8px; color: #fff; font-family: Georgia, serif; font-size: clamp(19px, 2.4vw, 30px); font-weight: 400; line-height: 1; text-shadow: 0 1px 6px rgba(0, 0, 0, .35); }
-.category-scroll { position: absolute; z-index: 2; top: 50%; display: grid; width: 44px; height: 44px; place-items: center; border: 0; background: rgba(255, 255, 255, .96); color: #111; cursor: pointer; font: inherit; font-size: 27px; line-height: 1; transform: translateY(-50%); }
-.category-scroll:hover { background: #fff; }
+.category-scroll { position: absolute; z-index: 2; top: 50%; display: grid; width: 46px; height: 46px; place-items: center; border: 1px solid rgba(255, 255, 255, .85); border-radius: 50%; background: rgba(248, 246, 241, .9); color: #414437; cursor: pointer; font: inherit; line-height: 1; box-shadow: 0 5px 18px rgba(38, 31, 28, .2); backdrop-filter: blur(8px); transform: translateY(-50%); transition: background .2s, box-shadow .2s, transform .2s; }
+.category-scroll:hover { background: #fff; box-shadow: 0 7px 22px rgba(38, 31, 28, .25); transform: translateY(-50%) scale(1.06); }
 .category-scroll:focus-visible { outline: 2px solid #414437; outline-offset: -3px; }
-.category-scroll span { width: 13px; height: 13px; border-top: 2px solid currentColor; border-right: 2px solid currentColor; }
+.category-scroll span { width: 11px; height: 11px; border-top: 1.8px solid currentColor; border-right: 1.8px solid currentColor; }
 #category-scroll-prev span { transform: rotate(-135deg); }
 #category-scroll-next span { transform: rotate(45deg); }
 #category-scroll-prev { left: 6px; }
@@ -213,7 +213,7 @@ body.cart-open { overflow: hidden; }
   .storefront-banner { width: calc(100% - 36px); }
   .category-tile { flex-basis: 56%; aspect-ratio: .82; }
   .category-tile span { margin: 12px 8px; font-size: clamp(20px, 6vw, 28px); }
-  .category-scroll { width: 36px; height: 36px; font-size: 23px; }
+  .category-scroll { width: 40px; height: 40px; }
   .hero { min-height: min(132vw, 650px); }
   .hero-copy { top: auto; right: 24px; bottom: 32px; left: 24px; width: auto; max-width: 560px; margin: 0 auto; padding: 0; text-align: center; transform: none; }
   .hero-text { margin: 18px auto 22px; }

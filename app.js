@@ -145,7 +145,10 @@ document.querySelectorAll("[data-filter]").forEach((button) => {
 function scrollCategories(direction) {
   const firstTile = categoryTrack.querySelector(".category-tile");
   const gap = Number.parseFloat(getComputedStyle(categoryTrack).columnGap) || 0;
-  categoryTrack.scrollBy({ left: direction * (firstTile.getBoundingClientRect().width + gap), behavior: "smooth" });
+  const distance = firstTile.getBoundingClientRect().width + gap;
+  const maxScroll = categoryTrack.scrollWidth - categoryTrack.clientWidth;
+  const targetScroll = Math.min(maxScroll, Math.max(0, categoryTrack.scrollLeft + direction * distance));
+  categoryTrack.scrollTo({ left: targetScroll, behavior: "instant" });
 }
 
 previousCategoryButton.addEventListener("click", () => scrollCategories(-1));
