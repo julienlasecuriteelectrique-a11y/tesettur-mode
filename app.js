@@ -1,12 +1,15 @@
 const products = [
-  { id: 1, name: "Abaya Noura", category: "Abayas", price: 69, label: "NOUVEAUTÉ", color: "#777a60", background: "#e8e3d8", skin: "#c49a7d" },
-  { id: 2, name: "Robe Lina", category: "Robes", price: 59, label: "COUP DE CŒUR", color: "#9b7664", background: "#eee4dc", skin: "#b98d71" },
-  { id: 3, name: "Hijab Safa", category: "Hijabs", price: 19, label: "ESSENTIEL", color: "#b1a88f", background: "#e8e5dc", skin: "#c29477" },
-  { id: 4, name: "Ensemble Aya", category: "Ensembles", price: 79, label: "NOUVEAUTÉ", color: "#666f70", background: "#e2e7e5", skin: "#bd9274" },
-  { id: 5, name: "Abaya Yasmin", category: "Abayas", price: 74, label: "ÉDITION LIMITÉE", color: "#aa8a68", background: "#eee8dc", skin: "#c5997d" },
-  { id: 6, name: "Robe Amira", category: "Robes", price: 64, label: "DOUCEUR", color: "#85836c", background: "#e7e5dc", skin: "#b98a6d" },
-  { id: 7, name: "Hijab Noor", category: "Hijabs", price: 17, label: "ESSENTIEL", color: "#9a7880", background: "#eee3e6", skin: "#c4987d" },
-  { id: 8, name: "Ensemble Selma", category: "Ensembles", price: 89, label: "NOUVEAUTÉ", color: "#6e6256", background: "#e8e2dc", skin: "#bd9275" }
+  { id: 1, name: "Sac à main camel", category: "Sacs", price: 59, label: "SAC", color: "#a9663f", background: "#f2e4d3", image: "sac-a-main-camel.jpeg" },
+  { id: 2, name: "Bijoux dorés", category: "Bijoux", price: 29, label: "BIJOUX", color: "#b58a43", background: "#f2ead8", image: "bijoux-dores.jpeg" },
+  { id: 3, name: "Ensemble maille écru", category: "Ensembles", price: 79, label: "NOUVEAUTÉ", color: "#b2a28b", background: "#f1e8dd", image: "ensemble-maille-ecru.jpeg" },
+  { id: 4, name: "Hijab rose poudré", category: "Hijabs", price: 19, label: "ESSENTIEL", color: "#c38b80", background: "#f3e3df", image: "hijab-rose-poudre.png" },
+  { id: 5, name: "Pantalon fluide noir", category: "Pantalons", price: 39, label: "ESSENTIEL", color: "#38312f", background: "#e9e4dc", image: "pantalon-fluide-noir.jpeg" },
+  { id: 6, name: "Pull maille écru", category: "Pulls", price: 49, label: "DOUCEUR", color: "#c7b4a0", background: "#f1e7df", image: "pull-maille-ecru.jpeg" },
+  { id: 7, name: "Robe de soirée", category: "Robes", displayCategory: "Robe de soirée", price: 89, label: "OCCASION", color: "#d0b8a8", background: "#f3e5dc", image: "robe-soiree-perlee.jpeg" },
+  { id: 8, name: "Robe longue à pois", category: "Robes", price: 59, label: "COUP DE CŒUR", color: "#c7b49a", background: "#f0e7d9", image: "robe-longue-a-pois.jpeg" },
+  { id: 9, name: "Chemisier bordeaux", category: "Chemisiers", displayCategory: "Chemisier", price: 69, label: "NOUVEAUTÉ", color: "#743a46", background: "#f0e8e1", image: "ensemble-bordeaux-ivoire.jpeg" },
+  { id: 10, name: "Jupe", category: "Jupe", price: 59, label: "NOUVEAUTÉ", color: "#342c2b", background: "#eee4d7", image: "jupe-longue-noire.png" },
+  { id: 11, name: "Veste", category: "Veste", price: 79, label: "NOUVEAUTÉ", color: "#6685a3", background: "#e9e6df", image: "veste-longue-jean.png" }
 ];
 
 const cart = new Map();
@@ -36,12 +39,12 @@ function renderProducts() {
 
   productGrid.innerHTML = visibleProducts.map((product) => `
     <article class="product-card">
-      <div class="product-visual" style="--product-color:${product.color};--product-bg:${product.background};--skin:${product.skin}">
-        ${product.category === "Hijabs" ? '<span class="scarf" aria-hidden="true"></span>' : ""}
-        <span class="product-label">${product.label}</span>
+      <div class="product-visual${product.image ? " has-image" : ""}" style="--product-color:${product.color};--product-bg:${product.background};--skin:${product.skin}">
+        ${product.image ? `<img class="product-photo" src="${product.image}" alt="${product.name}">` : ""}
+        ${product.category === "Hijabs" && !product.image ? '<span class="scarf" aria-hidden="true"></span>' : ""}
       </div>
       <div class="product-info">
-        <div><h3>${product.name}</h3><p class="product-category">${product.category}</p></div>
+        <div><h3>${product.displayCategory ?? product.category}</h3></div>
         <p class="product-price">${euro(product.price)}</p>
       </div>
       <button class="add-button" type="button" data-add="${product.id}">Ajouter au panier <span aria-hidden="true">+</span></button>
@@ -107,7 +110,7 @@ productGrid.addEventListener("click", (event) => {
   const id = Number(button.dataset.add);
   cart.set(id, (cart.get(id) ?? 0) + 1);
   renderCart();
-  showToast(`${products.find((product) => product.id === id).name} ajouté au panier`);
+  showToast(`L’article « ${products.find((product) => product.id === id).name} » a été ajouté au panier.`);
 });
 
 cartItems.addEventListener("click", (event) => {
@@ -149,11 +152,11 @@ document.querySelectorAll("[data-filter]").forEach((button) => {
 
 searchInput.addEventListener("input", renderProducts);
 document.querySelector("#checkout-button").addEventListener("click", () => {
-  document.querySelector("#checkout-note").textContent = "Le paiement n'est pas encore configuré. Choisissez une solution de paiement avant d'ouvrir la boutique.";
+  document.querySelector("#checkout-note").textContent = "Le paiement en ligne n’est pas encore configuré. Contactez la boutique pour finaliser votre commande.";
 });
 document.querySelector("#newsletter-form").addEventListener("submit", (event) => {
   event.preventDefault();
-  document.querySelector("#newsletter-message").textContent = "Merci ! L'inscription sera activée lors de la mise en ligne.";
+  document.querySelector("#newsletter-message").textContent = "Merci ! L’inscription à la newsletter sera disponible lors de la mise en ligne.";
   event.currentTarget.reset();
 });
 
