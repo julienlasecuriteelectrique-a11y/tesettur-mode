@@ -15,6 +15,31 @@ const products = [
 const cart = new Map();
 const oneSizeCategories = new Set(["Accessoires", "Bijoux", "Hijab"]);
 const clothingSizes = ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"];
+const recommendationCategories = {
+  "Accessoires": ["Bijoux", "Hijab", "Robe de soirée"],
+  "Bijoux": ["Accessoires", "Hijab", "Robe de soirée"],
+  "Chemisier": ["Ensembles", "Jupe", "Pantalons"],
+  "Ensembles": ["Chemisier", "Pulls", "Pantalons"],
+  "Hijab": ["Accessoires", "Bijoux", "Ensembles"],
+  "Jupe": ["Chemisier", "Pulls", "Veste"],
+  "Pantalons": ["Chemisier", "Ensembles", "Veste"],
+  "Pulls": ["Ensembles", "Pantalons", "Jupe"],
+  "Robe": ["Robe de soirée", "Accessoires", "Bijoux"],
+  "Robe de soirée": ["Robe", "Bijoux", "Accessoires"],
+  "Veste": ["Pantalons", "Pulls", "Jupe"]
+};
+const favoriteStorageKey = "tesettur-mode-favorites";
+
+function readFavorites() {
+  try {
+    const storedFavorites = JSON.parse(localStorage.getItem(favoriteStorageKey) ?? "[]");
+    return new Set(Array.isArray(storedFavorites) ? storedFavorites.filter((id) => products.some((product) => product.id === id)) : []);
+  } catch {
+    return new Set();
+  }
+}
+
+const favorites = readFavorites();
 const productGrid = document.querySelector("#product-grid");
 const searchInput = document.querySelector("#search-input");
 const emptyResults = document.querySelector("#empty-results");
@@ -25,15 +50,19 @@ const cartEmpty = document.querySelector("#cart-empty");
 const toast = document.querySelector("#toast");
 const productDetail = document.querySelector("#product-detail");
 const sizeGuideDialog = document.querySelector("#size-guide-dialog");
-const categoryTrack = document.querySelector("#category-track");
-const previousCategoryButton = document.querySelector("#category-scroll-prev");
-const nextCategoryButton = document.querySelector("#category-scroll-next");
+const checkoutDialog = document.querySelector("#checkout-dialog");
+const checkoutForm = document.querySelector("#checkout-form");
+const trackingDrawer = document.querySelector("#tracking-drawer");
+const chatPanel = document.querySelector("#chat-panel");
+const chatMessages = document.querySelector("#chat-messages");
+const chatInput = document.querySelector("#chat-input");
 let activeFilter = "Tout";
 let toastTimer;
 let selectedProduct = null;
 let selectedSize = "";
 let detailTrigger = null;
 let guideTab = "measurements";
+let checkoutStage = 1;
 
 const euro = (amount) => new Intl.NumberFormat("fr-FR", {
   style: "currency",
@@ -45,7 +74,8 @@ function renderProducts() {
 
   const query = searchInput.value.trim().toLocaleLowerCase("fr");
   const visibleProducts = products.filter((product) => {
-    const matchesCategory = activeFilter === "Tout" || product.category === activeFilter;
+    const matchesCategory = activeFilter === "Tout"
+      || (activeFilter === "Favoris" ? favorites.has(product.id) : product.category === activeFilter);
     const matchesSearch = `${product.name} ${product.category}`.toLocaleLowerCase("fr").includes(query);
     return matchesCategory && matchesSearch;
   });
@@ -55,6 +85,9 @@ function renderProducts() {
       <div class="product-visual${product.image ? " has-image" : ""}" style="--product-color:${product.color};--product-bg:${product.background};--skin:${product.skin}">
         ${product.image ? `<button class="product-image-trigger" type="button" data-product="${product.id}" aria-label="Voir la fiche de ${product.name}"><img class="product-photo" src="${product.image}" alt="" loading="lazy"></button>` : ""}
         <span class="product-label">${product.label}</span>
+        <button class="favorite-toggle" type="button" data-favorite="${product.id}" aria-label="${favorites.has(product.id) ? "Retirer" : "Ajouter"} ${product.name} des favoris" aria-pressed="${favorites.has(product.id)}">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg>
+        </button>
       </div>
       <div class="product-info">
         <div><h3><button class="product-title-trigger" type="button" data-product="${product.id}">${product.name}</button></h3><p class="product-category">${product.displayCategory ?? product.category}</p></div>
@@ -65,6 +98,45 @@ function renderProducts() {
   `).join("");
 
   emptyResults.hidden = visibleProducts.length !== 0;
+  emptyResults.textContent = activeFilter === "Favoris" && favorites.size === 0
+    ? "Vous n’avez pas encore d’article favori."
+    : "Aucun article ne correspond à votre recherche.";
+}
+
+function toggleFavorite(productId) {
+  if (favorites.has(productId)) favorites.delete(productId);
+  else favorites.add(productId);
+
+  try {
+    localStorage.setItem(favoriteStorageKey, JSON.stringify([...favorites]));
+  } catch {
+    showToast("Les favoris ne peuvent pas être mémorisés sur cet appareil.");
+  }
+
+  renderProducts();
+  if (selectedProduct?.id === productId) updateDetailFavorite();
+}
+
+function updateDetailFavorite() {
+  const favoriteButton = document.querySelector("#detail-favorite");
+  const isFavorite = favorites.has(selectedProduct.id);
+  favoriteButton.setAttribute("aria-pressed", String(isFavorite));
+  favoriteButton.setAttribute("aria-label", `${isFavorite ? "Retirer" : "Ajouter"} ${selectedProduct.name} des favoris`);
+}
+
+function renderRecommendations(product) {
+  const relatedProducts = (recommendationCategories[product.category] ?? [])
+    .map((category) => products.find((item) => item.category === category))
+    .filter(Boolean)
+    .slice(0, 3);
+
+  document.querySelector("#related-products").innerHTML = relatedProducts.map((relatedProduct) => `
+    <button class="related-product" type="button" data-related-product="${relatedProduct.id}" aria-label="Voir ${relatedProduct.name}">
+      <img src="${relatedProduct.image}" alt="" loading="lazy">
+      <span class="related-product-name">${relatedProduct.name}</span>
+      <span class="related-product-price">${euro(relatedProduct.price)}</span>
+    </button>
+  `).join("");
 }
 
 function renderCart() {
@@ -112,13 +184,81 @@ function addToCart(product, size) {
   showToast(`${product.name} ajouté au panier`);
 }
 
+function renderCheckoutSummary() {
+  const formData = new FormData(checkoutForm);
+  const fullName = `${formData.get("firstName")} ${formData.get("lastName")}`;
+  const deliveryMethod = formData.get("deliveryMethod");
+  const isHomeDelivery = deliveryMethod === "home";
+  const address = isHomeDelivery
+    ? [
+      formData.get("address"),
+      formData.get("addressComplement"),
+      `${formData.get("postalCode")} ${formData.get("city")}`,
+      formData.get("accessCode") && `Code portail / interphone : ${formData.get("accessCode")}`,
+      formData.get("floor") && `Étage : ${formData.get("floor")}`,
+      formData.get("deliveryNotes") && `Instructions : ${formData.get("deliveryNotes")}`
+    ].filter((line) => typeof line === "string" && line.trim()).join(" · ")
+    : `Point relais souhaité : ${formData.get("relayAddress")}`;
+  const entries = [...cart.entries()];
+  const total = entries.reduce((sum, [key, count]) => {
+    const product = products.find((item) => item.id === Number(key.split("|")[0]));
+    return sum + product.price * count;
+  }, 0);
+
+  document.querySelector("#checkout-summary-contact").textContent = `${fullName} · ${formData.get("email")} · ${formData.get("phone")}`;
+  document.querySelector("#checkout-summary-delivery").textContent = `Mode de livraison : ${isHomeDelivery ? "À domicile" : "Point relais"}`;
+  document.querySelector("#checkout-summary-address").textContent = address;
+  document.querySelector("#checkout-summary").innerHTML = entries.map(([key, count]) => {
+    const [productId, size] = key.split("|");
+    const product = products.find((item) => item.id === Number(productId));
+    const sizeDescription = size === "Taille unique" ? "Taille unique" : `Taille ${size}`;
+    return `<div class="checkout-summary-row"><div><strong>${product.name}</strong><span>${sizeDescription} · quantité ${count}</span></div><strong>${euro(product.price * count)}</strong></div>`;
+  }).join("");
+  document.querySelector("#checkout-subtotal").textContent = euro(total);
+}
+
+function setCheckoutStage(stage) {
+  checkoutStage = stage;
+  document.querySelectorAll("[data-checkout-stage]").forEach((section) => {
+    section.hidden = Number(section.dataset.checkoutStage) !== checkoutStage;
+  });
+  document.querySelectorAll("[data-checkout-indicator]").forEach((indicator) => {
+    const indicatorStage = Number(indicator.dataset.checkoutIndicator);
+    if (indicatorStage === checkoutStage) indicator.setAttribute("aria-current", "step");
+    else indicator.removeAttribute("aria-current");
+    indicator.classList.toggle("is-complete", indicatorStage < checkoutStage);
+  });
+  if (checkoutStage === 3) renderCheckoutSummary();
+  checkoutDialog.querySelector(`[data-checkout-stage="${checkoutStage}"] h3`).focus();
+}
+
+function updateDeliveryMethod(method) {
+  const isHomeDelivery = method === "home";
+  const homeFields = document.querySelector("#home-delivery-fields");
+  const relayFields = document.querySelector("#relay-delivery-fields");
+
+  homeFields.hidden = !isHomeDelivery;
+  homeFields.querySelectorAll("input, textarea").forEach((field) => {
+    field.disabled = !isHomeDelivery;
+  });
+  relayFields.hidden = isHomeDelivery;
+  relayFields.querySelector("input").disabled = isHomeDelivery;
+  document.querySelectorAll(".delivery-method-card").forEach((card) => {
+    card.classList.toggle("is-selected", card.querySelector("input").checked);
+  });
+  document.querySelector("#delivery-method-hint").textContent = isHomeDelivery
+    ? "Les frais et délais de livraison seront confirmés avant le paiement."
+    : "Le point relais et sa disponibilité seront confirmés avant le paiement.";
+}
+
 function openProductDetail(productId, trigger) {
   const product = products.find((item) => item.id === productId);
   if (!product) return;
 
+  const detailAlreadyOpen = productDetail.open;
   selectedProduct = product;
   selectedSize = "";
-  detailTrigger = trigger;
+  if (trigger) detailTrigger = trigger;
   document.querySelector("#detail-image").src = product.image;
   document.querySelector("#detail-image").alt = product.name;
   document.querySelector("#detail-label").textContent = product.label;
@@ -138,7 +278,10 @@ function openProductDetail(productId, trigger) {
     tab.tabIndex = selected ? 0 : -1;
   });
   document.querySelector("#detail-tab-panel").textContent = `${product.displayCategory ?? product.category} sélectionné(e) par Tesettür Mode.`;
-  productDetail.showModal();
+  updateDetailFavorite();
+  renderRecommendations(product);
+  document.querySelector(".detail-copy").scrollTop = 0;
+  if (!detailAlreadyOpen) productDetail.showModal();
 }
 
 function renderSizeGuide(tab = guideTab) {
@@ -183,12 +326,80 @@ function showToast(message) {
   toastTimer = window.setTimeout(() => toast.classList.remove("visible"), 2200);
 }
 
+function normalizeChatText(text) {
+  return text.toLocaleLowerCase("fr").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+function getChatReply(topic) {
+  const normalizedTopic = normalizeChatText(topic);
+
+  if (/suivi|colis|transporteur|numero/.test(normalizedTopic)) {
+    return "Dans la rubrique « Suivi colis », choisissez votre transporteur et saisissez le numéro reçu par e-mail ou SMS. Le site du transporteur s’ouvrira pour afficher le suivi.";
+  }
+  if (/livraison|relais|domicile|portail|etage/.test(normalizedTopic)) {
+    return "À l’étape Livraison, choisissez domicile ou point relais. Les frais, délais et disponibilité du relais restent à confirmer avant le paiement.";
+  }
+  if (/taille|mensuration|mesure/.test(normalizedTopic)) {
+    return "Vous pouvez choisir une taille sur la fiche produit. Le tableau de mensurations de la boutique est en préparation ; contactez-nous pour un conseil précis.";
+  }
+  if (/paiement|payer|carte|stripe/.test(normalizedTopic)) {
+    return "Le parcours de commande est disponible, mais le paiement en ligne n’est pas encore activé. Stripe sera connecté ultérieurement ; aucun montant n’est débité pour le moment.";
+  }
+  if (/favori|coeur|aime/.test(normalizedTopic)) {
+    return "Touchez le cœur sur un article pour l’ajouter aux favoris, puis choisissez « Favoris » dans les filtres de la collection.";
+  }
+  if (/commande|panier|acheter/.test(normalizedTopic)) {
+    return "Ajoutez l’article au panier, choisissez sa taille si nécessaire, puis passez à la commande. Le parcours s’arrête avant le paiement tant que Stripe n’est pas configuré.";
+  }
+  if (/contact|adresse|telephone|boutique|parler/.test(normalizedTopic)) {
+    return "La boutique est au 4 Rue d’Avéjan, 30100 Alès. Téléphone : 07 68 03 20 93 ou 07 45 65 65 72. E-mail : contact.tesetturmode@gmail.com.";
+  }
+  return "Je n’ai pas cette information confirmée. Contactez la boutique au 07 68 03 20 93 ou à contact.tesetturmode@gmail.com.";
+}
+
+function appendChatMessage(message, sender) {
+  const messageElement = document.createElement("p");
+  messageElement.className = `chat-message chat-message-${sender}`;
+  messageElement.textContent = message;
+  chatMessages.append(messageElement);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function answerChat(topic, questionLabel = topic) {
+  appendChatMessage(questionLabel, "user");
+  appendChatMessage(getChatReply(topic), "bot");
+}
+
+function setChatOpen(open) {
+  chatPanel.hidden = !open;
+  document.querySelector("#chat-trigger").setAttribute("aria-expanded", String(open));
+  if (open) chatInput.focus();
+  else document.querySelector("#chat-trigger").focus();
+}
+
 function setCartOpen(open) {
+  if (open) {
+    trackingDrawer.classList.remove("open");
+    trackingDrawer.setAttribute("aria-hidden", "true");
+  }
   cartDrawer.classList.toggle("open", open);
   cartDrawer.setAttribute("aria-hidden", String(!open));
   cartBackdrop.hidden = !open;
   document.body.classList.toggle("cart-open", open);
   if (open) document.querySelector("#close-cart").focus();
+}
+
+function setTrackingOpen(open) {
+  if (open) {
+    cartDrawer.classList.remove("open");
+    cartDrawer.setAttribute("aria-hidden", "true");
+  }
+  trackingDrawer.classList.toggle("open", open);
+  trackingDrawer.setAttribute("aria-hidden", String(!open));
+  cartBackdrop.hidden = !open;
+  document.body.classList.toggle("cart-open", open);
+  if (open) document.querySelector("#tracking-number").focus();
+  else document.querySelector("#open-tracking").focus();
 }
 
 cartItems.addEventListener("click", (event) => {
@@ -210,9 +421,17 @@ cartItems.addEventListener("click", (event) => {
 
 document.querySelector("#open-cart").addEventListener("click", () => setCartOpen(true));
 document.querySelector("#close-cart").addEventListener("click", () => setCartOpen(false));
-cartBackdrop.addEventListener("click", () => setCartOpen(false));
+document.querySelector("#open-tracking").addEventListener("click", () => setTrackingOpen(true));
+document.querySelector("#close-tracking").addEventListener("click", () => setTrackingOpen(false));
+cartBackdrop.addEventListener("click", () => {
+  if (trackingDrawer.classList.contains("open")) setTrackingOpen(false);
+  else setCartOpen(false);
+});
 document.querySelector("#continue-shopping").addEventListener("click", () => setCartOpen(false));
 document.querySelector("#close-product-detail").addEventListener("click", () => productDetail.close());
+document.querySelector("#detail-favorite").addEventListener("click", () => {
+  if (selectedProduct) toggleFavorite(selectedProduct.id);
+});
 document.querySelector("#open-size-guide").addEventListener("click", () => {
   renderSizeGuide("measurements");
   sizeGuideDialog.showModal();
@@ -233,7 +452,9 @@ productDetail.addEventListener("close", () => {
   detailTrigger = null;
 });
 document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && cartDrawer.classList.contains("open")) setCartOpen(false);
+  if (event.key !== "Escape") return;
+  if (cartDrawer.classList.contains("open")) setCartOpen(false);
+  if (trackingDrawer.classList.contains("open")) setTrackingOpen(false);
 });
 
 document.querySelectorAll("[data-filter]").forEach((button) => {
@@ -251,6 +472,12 @@ document.querySelectorAll("[data-filter]").forEach((button) => {
 });
 
 document.querySelector("#product-grid").addEventListener("click", (event) => {
+  const favoriteButton = event.target.closest("[data-favorite]");
+  if (favoriteButton) {
+    toggleFavorite(Number(favoriteButton.dataset.favorite));
+    return;
+  }
+
   const detailButton = event.target.closest("[data-product]");
   if (detailButton) {
     openProductDetail(Number(detailButton.dataset.product), detailButton);
@@ -263,6 +490,11 @@ document.querySelector("#product-grid").addEventListener("click", (event) => {
   cart.set(id, (cart.get(id) ?? 0) + 1);
   renderCart();
   showToast(`${products.find((product) => product.id === id).name} ajouté au panier`);
+});
+
+document.querySelector("#related-products").addEventListener("click", (event) => {
+  const relatedButton = event.target.closest("[data-related-product]");
+  if (relatedButton) openProductDetail(Number(relatedButton.dataset.relatedProduct));
 });
 
 document.querySelector("#detail-add").addEventListener("click", () => {
@@ -300,22 +532,88 @@ document.querySelector(".detail-tabs").addEventListener("click", (event) => {
   document.querySelector("#detail-tab-panel").textContent = panelContent[tab.dataset.detailTab];
 });
 
-function scrollCategories(direction) {
-  const firstTile = categoryTrack.querySelector(".category-tile");
-  const gap = Number.parseFloat(getComputedStyle(categoryTrack).columnGap) || 0;
-  const cardsPerClick = window.matchMedia("(max-width: 760px)").matches ? 3 : 1;
-  const distance = (firstTile.getBoundingClientRect().width + gap) * cardsPerClick;
-  const maxScroll = categoryTrack.scrollWidth - categoryTrack.clientWidth;
-  const targetScroll = Math.min(maxScroll, Math.max(0, categoryTrack.scrollLeft + direction * distance));
-  categoryTrack.scrollTo({ left: targetScroll, behavior: "instant" });
-}
-
-previousCategoryButton.addEventListener("click", () => scrollCategories(-1));
-nextCategoryButton.addEventListener("click", () => scrollCategories(1));
-
 searchInput.addEventListener("input", renderProducts);
+document.querySelector("#tracking-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const carrier = document.querySelector("#tracking-carrier").value;
+  const trackingNumber = document.querySelector("#tracking-number").value.trim();
+  const trackingPages = {
+    laposte: "https://www.laposte.fr/outils/suivre-vos-envois",
+    chronopost: "https://www.chronopost.fr/fr/suivi-colis",
+    mondialrelay: "https://www.mondialrelay.fr/suivi-de-colis/"
+  };
+  const trackingLabels = {
+    laposte: "La Poste / Colissimo",
+    chronopost: "Chronopost",
+    mondialrelay: "Mondial Relay"
+  };
+
+  const trackingMessage = document.querySelector("#tracking-message");
+  const copyTask = navigator.clipboard?.writeText(trackingNumber)
+    .then(() => true)
+    .catch(() => false) ?? Promise.resolve(false);
+  const trackingWindow = window.open(trackingPages[carrier], "_blank");
+
+  if (trackingWindow) {
+    trackingWindow.opener = null;
+    const copied = await copyTask;
+    trackingMessage.textContent = copied
+      ? `Numéro copié. Collez-le sur la page ${trackingLabels[carrier]} qui vient de s’ouvrir.`
+      : `La page ${trackingLabels[carrier]} s’est ouverte. Saisissez-y votre numéro de suivi.`;
+    return;
+  }
+
+  trackingMessage.textContent = "Le navigateur a bloqué le nouvel onglet ; la page de suivi va s’ouvrir ici.";
+  window.location.assign(trackingPages[carrier]);
+});
+
 document.querySelector("#checkout-button").addEventListener("click", () => {
-  document.querySelector("#checkout-note").textContent = "Le paiement en ligne n’est pas encore configuré. Contactez la boutique pour finaliser votre commande.";
+  if (cart.size === 0) return;
+  setCheckoutStage(1);
+  checkoutDialog.showModal();
+});
+document.querySelector("#close-checkout").addEventListener("click", () => checkoutDialog.close());
+checkoutDialog.addEventListener("close", () => {
+  checkoutForm.reset();
+  updateDeliveryMethod("home");
+  setCheckoutStage(1);
+});
+checkoutDialog.addEventListener("click", (event) => {
+  if (event.target === checkoutDialog) checkoutDialog.close();
+});
+checkoutForm.addEventListener("submit", (event) => event.preventDefault());
+checkoutForm.addEventListener("change", (event) => {
+  if (event.target.name === "deliveryMethod") updateDeliveryMethod(event.target.value);
+});
+checkoutForm.addEventListener("click", (event) => {
+  const nextButton = event.target.closest("[data-checkout-next]");
+  if (nextButton) {
+    const visibleFields = checkoutForm.querySelectorAll(`[data-checkout-stage="${checkoutStage}"] input`);
+    const invalidField = [...visibleFields].find((field) => !field.reportValidity());
+    if (invalidField) return;
+    setCheckoutStage(Number(nextButton.dataset.checkoutNext));
+    return;
+  }
+
+  const backButton = event.target.closest("[data-checkout-back]");
+  if (backButton) setCheckoutStage(Number(backButton.dataset.checkoutBack));
+});
+document.querySelector("#chat-trigger").addEventListener("click", () => setChatOpen(chatPanel.hidden));
+document.querySelector("#chat-close").addEventListener("click", () => setChatOpen(false));
+document.querySelector(".chat-suggestions").addEventListener("click", (event) => {
+  const suggestion = event.target.closest("[data-chat-topic]");
+  if (suggestion) answerChat(suggestion.dataset.chatTopic, suggestion.textContent.trim());
+});
+document.querySelector("#chat-form").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const question = chatInput.value.trim();
+  if (!question) return;
+  answerChat(question);
+  chatInput.value = "";
+  chatInput.focus();
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !chatPanel.hidden) setChatOpen(false);
 });
 document.querySelector("#newsletter-form").addEventListener("submit", (event) => {
   event.preventDefault();

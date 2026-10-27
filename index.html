@@ -23,6 +23,7 @@
         <a href="#collection" data-filter="Robe">Robes</a>
         <a href="#collection" data-filter="Ensembles">Ensembles</a>
         <a href="#boutique">La boutique</a>
+        <button class="nav-link-button" id="open-tracking" type="button">Suivi colis</button>
       </nav>
       <div class="header-tools">
         <label class="search">
@@ -37,6 +38,27 @@
     </header>
 
     <main id="top">
+      <section class="category-section" id="categories" aria-labelledby="category-title">
+        <div class="section-heading category-heading">
+          <div><p class="eyebrow">TROUVER VOTRE PIÈCE</p><h2 id="category-title">Les collections</h2></div>
+        </div>
+        <nav class="category-carousel" aria-label="Explorer les catégories">
+          <div class="category-track" id="category-track">
+            <a class="category-tile" href="#collection" data-filter="Robe" style="--category-image: url('robe-longue-a-pois.jpeg')"><span>Robes <b>↗</b></span></a>
+            <a class="category-tile" href="#collection" data-filter="Robe de soirée" style="--category-image: url('robe-soiree-perlee.jpeg')"><span>Robes de soirée <b>↗</b></span></a>
+            <a class="category-tile" href="#collection" data-filter="Ensembles" style="--category-image: url('ensemble-maille-ecru.jpeg')"><span>Ensembles <b>↗</b></span></a>
+            <a class="category-tile" href="#collection" data-filter="Chemisier" style="--category-image: url('ensemble-bordeaux-ivoire.jpeg')"><span>Chemisiers <b>↗</b></span></a>
+            <a class="category-tile" href="#collection" data-filter="Veste" style="--category-image: url('veste-longue-jean.png')"><span>Vestes <b>↗</b></span></a>
+            <a class="category-tile" href="#collection" data-filter="Jupe" style="--category-image: url('jupe-longue-noire.png')"><span>Jupes <b>↗</b></span></a>
+            <a class="category-tile" href="#collection" data-filter="Pantalons" style="--category-image: url('pantalon-fluide-noir.jpeg')"><span>Pantalons <b>↗</b></span></a>
+            <a class="category-tile" href="#collection" data-filter="Pulls" style="--category-image: url('pull-maille-ecru.jpeg')"><span>Pulls <b>↗</b></span></a>
+            <a class="category-tile" href="#collection" data-filter="Hijab" style="--category-image: url('hijab-rose-poudre.png')"><span>Hijabs <b>↗</b></span></a>
+            <a class="category-tile" href="#collection" data-filter="Accessoires" style="--category-image: url('sac-a-main-camel.jpeg')"><span>Accessoires <b>↗</b></span></a>
+            <a class="category-tile" href="#collection" data-filter="Bijoux" style="--category-image: url('bijoux-dores.jpeg')"><span>Bijoux <b>↗</b></span></a>
+          </div>
+        </nav>
+      </section>
+
       <section class="hero" aria-label="Collection mise en avant">
         <div class="hero-copy">
           <p class="eyebrow">TESETTÜR MODE · NOUVELLE SAISON</p>
@@ -51,27 +73,6 @@
         </div>
       </section>
 
-      <section class="category-section" id="categories" aria-labelledby="category-title">
-        <div class="section-heading category-heading">
-          <div><p class="eyebrow">TROUVER VOTRE PIÈCE</p><h2 id="category-title">Les collections</h2></div>
-          <div class="carousel-controls">
-            <button class="category-scroll" id="category-scroll-prev" type="button" aria-label="Voir les catégories précédentes"><span aria-hidden="true"></span></button>
-            <button class="category-scroll" id="category-scroll-next" type="button" aria-label="Voir les catégories suivantes"><span aria-hidden="true"></span></button>
-          </div>
-        </div>
-        <nav class="category-carousel" aria-label="Explorer les catégories">
-          <div class="category-track" id="category-track">
-            <a class="category-tile" href="#collection" data-filter="Robe" style="--category-image: url('robe-longue-a-pois.jpeg')"><span>Robes <b>↗</b></span></a>
-            <a class="category-tile" href="#collection" data-filter="Ensembles" style="--category-image: url('ensemble-maille-ecru.jpeg')"><span>Ensembles <b>↗</b></span></a>
-            <a class="category-tile" href="#collection" data-filter="Veste" style="--category-image: url('veste-longue-jean.png')"><span>Vestes <b>↗</b></span></a>
-            <a class="category-tile" href="#collection" data-filter="Jupe" style="--category-image: url('jupe-longue-noire.png')"><span>Jupes <b>↗</b></span></a>
-            <a class="category-tile" href="#collection" data-filter="Pantalons" style="--category-image: url('pantalon-fluide-noir.jpeg')"><span>Pantalons <b>↗</b></span></a>
-            <a class="category-tile" href="#collection" data-filter="Hijab" style="--category-image: url('hijab-rose-poudre.png')"><span>Hijabs <b>↗</b></span></a>
-            <a class="category-tile" href="#collection" data-filter="Accessoires" style="--category-image: url('sac-a-main-camel.jpeg')"><span>Accessoires <b>↗</b></span></a>
-          </div>
-        </nav>
-      </section>
-
       <section class="collection" id="collection" aria-labelledby="collection-title">
         <div class="section-heading collection-heading">
           <div><p class="eyebrow">LA SÉLECTION DU MOMENT</p><h2 id="collection-title">À porter, à aimer</h2></div>
@@ -79,6 +80,7 @@
         </div>
         <div class="filter-list" role="group" aria-label="Filtrer les produits">
           <button class="filter-button is-active" type="button" data-filter="Tout" aria-pressed="true">Tout voir</button>
+          <button class="filter-button" type="button" data-filter="Favoris" aria-pressed="false">Favoris</button>
           <button class="filter-button" type="button" data-filter="Robe" aria-pressed="false">Robes</button>
           <button class="filter-button" type="button" data-filter="Ensembles" aria-pressed="false">Ensembles</button>
           <button class="filter-button" type="button" data-filter="Pantalons" aria-pressed="false">Pantalons</button>
@@ -142,7 +144,12 @@
         <div class="detail-copy">
           <p class="eyebrow">TESETTÜR MODE · SÉLECTION</p>
           <p class="detail-category" id="detail-category"></p>
-          <h2 id="detail-name"></h2>
+          <div class="detail-title-row">
+            <h2 id="detail-name"></h2>
+            <button class="favorite-toggle detail-favorite" id="detail-favorite" type="button" aria-label="Ajouter aux favoris" aria-pressed="false" data-favorite="">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg>
+            </button>
+          </div>
           <p class="detail-price" id="detail-price"></p>
           <div class="detail-size-picker" id="detail-size-picker" hidden>
             <div class="size-picker-heading"><span>Choisir une taille</span><button class="size-guide-trigger" id="open-size-guide" type="button">Guide des tailles</button></div>
@@ -157,6 +164,10 @@
           <div class="detail-tab-panel" id="detail-tab-panel" role="tabpanel" tabindex="0"></div>
           <a class="detail-contact" href="tel:+33768032093">Contacter la boutique <span aria-hidden="true">↗</span></a>
           <button class="button button-dark detail-add" id="detail-add" type="button" disabled>Ajouter au panier <span aria-hidden="true">+</span></button>
+          <section class="detail-recommendations" aria-labelledby="related-title">
+            <h3 id="related-title">À découvrir aussi</h3>
+            <div class="related-products" id="related-products"></div>
+          </section>
         </div>
       </div>
     </dialog>
@@ -177,6 +188,28 @@
       </div>
     </dialog>
 
+    <aside class="cart-drawer tracking-drawer" id="tracking-drawer" aria-labelledby="tracking-title" aria-hidden="true">
+      <div class="cart-heading">
+        <h2 id="tracking-title">Suivre mon colis</h2>
+        <button class="close-cart" id="close-tracking" type="button" aria-label="Fermer le suivi colis">×</button>
+      </div>
+      <p class="tracking-intro">Choisissez le transporteur indiqué dans votre e-mail ou SMS d’expédition.</p>
+      <form class="tracking-form" id="tracking-form">
+        <label for="tracking-carrier">Transporteur
+          <select id="tracking-carrier" name="carrier">
+            <option value="laposte">La Poste / Colissimo</option>
+            <option value="chronopost">Chronopost</option>
+            <option value="mondialrelay">Mondial Relay</option>
+          </select>
+        </label>
+        <label for="tracking-number">Numéro de suivi
+          <input id="tracking-number" name="trackingNumber" autocomplete="off" required>
+        </label>
+        <button class="button button-dark" type="submit">Ouvrir le suivi <span aria-hidden="true">↗</span></button>
+        <p class="tracking-message" id="tracking-message" aria-live="polite">Le numéro sera copié pour être saisi sur le site du transporteur.</p>
+      </form>
+    </aside>
+
     <div class="cart-backdrop" id="cart-backdrop" hidden></div>
     <aside class="cart-drawer" id="cart-drawer" aria-labelledby="cart-title" aria-hidden="true">
       <div class="cart-heading">
@@ -188,9 +221,103 @@
       <div class="cart-bottom">
         <div class="subtotal"><span>Sous-total</span><strong id="cart-subtotal">0,00 €</strong></div>
         <p>Frais de livraison calculés à l’étape suivante.</p>
-        <button class="button button-dark checkout-button" id="checkout-button" type="button" disabled>Continuer vers le paiement</button>
-        <p class="checkout-note" id="checkout-note" aria-live="polite">Le paiement en ligne sera disponible dès qu’une solution de paiement sera configurée.</p>
+        <button class="button button-dark checkout-button" id="checkout-button" type="button" disabled>Passer à la commande <span aria-hidden="true">→</span></button>
+        <p class="checkout-note" id="checkout-note" aria-live="polite">Coordonnées et livraison avant l’étape de paiement.</p>
       </div>
+    </aside>
+
+    <dialog class="checkout-dialog" id="checkout-dialog" aria-labelledby="checkout-title">
+      <div class="checkout-panel">
+        <header class="checkout-header">
+          <div><p class="eyebrow">VOTRE COMMANDE</p><h2 id="checkout-title">Finaliser la commande</h2></div>
+          <button class="detail-close checkout-close" id="close-checkout" type="button" aria-label="Fermer la commande">×</button>
+        </header>
+        <ol class="checkout-steps" aria-label="Étapes de commande">
+          <li data-checkout-indicator="1" aria-current="step"><span>01</span>Coordonnées</li>
+          <li data-checkout-indicator="2"><span>02</span>Livraison</li>
+          <li data-checkout-indicator="3"><span>03</span>Paiement</li>
+        </ol>
+        <form id="checkout-form">
+          <section class="checkout-stage" data-checkout-stage="1" aria-labelledby="checkout-contact-title">
+            <h3 id="checkout-contact-title" tabindex="-1">Vos coordonnées</h3>
+            <div class="checkout-fields">
+              <label>Prénom<input name="firstName" autocomplete="given-name" required></label>
+              <label>Nom<input name="lastName" autocomplete="family-name" required></label>
+              <label>E-mail<input name="email" type="email" autocomplete="email" required></label>
+              <label>Téléphone<input name="phone" type="tel" autocomplete="tel" required></label>
+            </div>
+            <div class="checkout-actions"><button class="button button-dark" type="button" data-checkout-next="2">Continuer vers la livraison <span aria-hidden="true">→</span></button></div>
+          </section>
+          <section class="checkout-stage" data-checkout-stage="2" aria-labelledby="checkout-delivery-title" hidden>
+            <h3 id="checkout-delivery-title" tabindex="-1">Mode de livraison</h3>
+            <div class="delivery-method-options" role="radiogroup" aria-label="Choisir le mode de livraison">
+              <label class="delivery-method-card is-selected"><input type="radio" name="deliveryMethod" value="home" checked><span>À domicile</span><small>Livraison à l’adresse indiquée</small></label>
+              <label class="delivery-method-card"><input type="radio" name="deliveryMethod" value="relay"><span>Point relais</span><small>Retrait dans un relais choisi</small></label>
+            </div>
+            <div class="checkout-fields delivery-fields" id="home-delivery-fields">
+              <label class="field-wide">Adresse<input name="address" autocomplete="street-address" required></label>
+              <label class="field-wide">Bâtiment, appartement ou complément d’adresse (facultatif)<input name="addressComplement" autocomplete="address-line2"></label>
+              <label>Code postal<input name="postalCode" autocomplete="postal-code" required></label>
+              <label>Ville<input name="city" autocomplete="address-level2" required></label>
+              <label>Code portail / interphone (facultatif)<input name="accessCode" autocomplete="off"></label>
+              <label>Étage (facultatif)<input name="floor" autocomplete="off"></label>
+              <label class="field-wide">Instructions pour le livreur (facultatif)<textarea name="deliveryNotes" rows="3"></textarea></label>
+            </div>
+            <div class="checkout-fields delivery-fields" id="relay-delivery-fields" hidden>
+              <label class="field-wide">Point relais souhaité (nom ou adresse)<input name="relayAddress" autocomplete="off" required disabled></label>
+            </div>
+            <p class="checkout-hint" id="delivery-method-hint">Les frais et délais de livraison seront confirmés avant le paiement.</p>
+            <div class="checkout-actions checkout-actions-split">
+              <button class="button button-light" type="button" data-checkout-back="1">← Coordonnées</button>
+              <button class="button button-dark" type="button" data-checkout-next="3">Continuer vers le paiement <span aria-hidden="true">→</span></button>
+            </div>
+          </section>
+          <section class="checkout-stage" data-checkout-stage="3" aria-labelledby="checkout-payment-title" hidden>
+            <h3 id="checkout-payment-title" tabindex="-1">Récapitulatif</h3>
+            <div class="checkout-customer-summary"><p id="checkout-summary-contact"></p><p id="checkout-summary-delivery"></p><p id="checkout-summary-address"></p></div>
+            <div id="checkout-summary" class="checkout-summary"></div>
+            <div class="checkout-total"><span>Sous-total</span><strong id="checkout-subtotal">0,00 €</strong></div>
+            <p class="checkout-hint">Livraison à confirmer. Le montant final sera affiché avant le paiement.</p>
+            <div class="payment-pending">
+              <p class="eyebrow">ÉTAPE SUIVANTE</p>
+              <h4>Paiement en ligne</h4>
+              <p>Le paiement sera disponible lorsque Stripe sera configuré. Aucune commande ne sera envoyée et aucun montant ne sera débité à cette étape.</p>
+            </div>
+            <div class="checkout-actions checkout-actions-split">
+              <button class="button button-light" type="button" data-checkout-back="2">← Livraison</button>
+              <button class="button button-dark" type="button" disabled>Continuer vers le paiement</button>
+            </div>
+          </section>
+        </form>
+      </div>
+    </dialog>
+
+    <aside class="chat-widget" aria-label="Aide Tesettür Mode">
+      <section class="chat-panel" id="chat-panel" role="dialog" aria-labelledby="chat-title" hidden>
+        <header class="chat-header">
+          <div><p class="eyebrow">TESETTÜR MODE</p><h2 id="chat-title">Comment puis-je aider ?</h2></div>
+          <button class="chat-close" id="chat-close" type="button" aria-label="Fermer l’aide">×</button>
+        </header>
+        <div class="chat-messages" id="chat-messages" role="log" aria-live="polite" aria-relevant="additions">
+          <p class="chat-message chat-message-bot">Bonjour ! Posez votre question ou choisissez un sujet ci-dessous.</p>
+        </div>
+        <div class="chat-suggestions" aria-label="Questions fréquentes">
+          <button type="button" data-chat-topic="livraison">Livraison</button>
+          <button type="button" data-chat-topic="suivi">Suivi colis</button>
+          <button type="button" data-chat-topic="tailles">Tailles</button>
+          <button type="button" data-chat-topic="paiement">Paiement</button>
+        </div>
+        <form class="chat-form" id="chat-form">
+          <label class="sr-only" for="chat-input">Votre question</label>
+          <input id="chat-input" name="question" placeholder="Votre question…" autocomplete="off" required>
+          <button type="submit" aria-label="Envoyer la question">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </form>
+      </section>
+      <button class="chat-trigger" id="chat-trigger" type="button" aria-label="Ouvrir l’aide" aria-controls="chat-panel" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H7l-4 2v-5.5A7.5 7.5 0 1 1 20 11.5Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M8 11h8M8 14.5h5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
     </aside>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
   </body>
