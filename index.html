@@ -6,8 +6,8 @@
     <meta name="theme-color" content="#f8f6f1">
     <meta name="description" content="Découvrez une sélection de vêtements modestes et élégants pour femme.">
     <title>Tesettür Mode — La modestie, avec allure</title>
-    <link rel="stylesheet" href="style.css?v=category-trio-1">
-    <script src="app.js?v=category-trio-2" defer></script>
+    <link rel="stylesheet" href="style.css?v=color-variants-1">
+    <script src="app.js?v=color-photo-3" defer></script>
   </head>
   <body>
     <div class="announcement"><span>Une mode pensée pour durer</span><span>Retrouvez-nous au cœur d’Alès</span></div>
@@ -151,6 +151,10 @@
             </button>
           </div>
           <p class="detail-price" id="detail-price"></p>
+          <div class="detail-color-picker" id="detail-color-picker" hidden>
+            <div class="color-picker-heading"><span>Couleur</span><span id="detail-color-selection" aria-live="polite">Choisissez une couleur</span></div>
+            <div class="color-swatch-list" id="detail-color-options" role="group" aria-label="Couleurs disponibles"></div>
+          </div>
           <div class="detail-size-picker" id="detail-size-picker" hidden>
             <div class="size-picker-heading"><span>Choisir une taille</span><button class="size-guide-trigger" id="open-size-guide" type="button">Guide des tailles</button></div>
             <div class="size-option-list" id="size-option-list" role="group" aria-label="Tailles"></div>

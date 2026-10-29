@@ -1,5 +1,9 @@
 .vscode/
 *.jpg
 *.JPG
+!haut-test-taupe.jpg
+!haut-test-bleu.jpg
+!haut-test-rose.jpg
+!pantalon-test.jpg
 logo.png
 jupe-veste-look.png

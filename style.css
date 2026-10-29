@@ -400,6 +400,15 @@ h2 { margin: 0; font-size: 42px; line-height: 1.12; }
 .detail-title-row h2 { min-width: 0; margin: 0; font-size: 42px; }
 .detail-favorite { position: static; flex: 0 0 40px; width: 40px; height: 40px; }
 .detail-price { margin: 13px 0 29px; font-size: 15px; }
+.detail-color-picker { margin: -10px 0 22px; }
+.color-picker-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 11px; font-weight: 600; }
+.color-picker-heading span + span { color: var(--muted); font-size: 10px; font-weight: 400; }
+.color-swatch-list { display: flex; flex-wrap: wrap; gap: 11px; margin-top: 12px; }
+.color-swatch { width: 34px; height: 34px; border: 1px solid #d5cec3; border-radius: 50%; padding: 3px; background: transparent; cursor: pointer; }
+.color-swatch::before { display: block; width: 100%; height: 100%; border-radius: 50%; background: var(--swatch-color); content: ""; }
+.color-swatch:hover, .color-swatch.is-selected { border-color: var(--ink); box-shadow: 0 0 0 2px var(--white), 0 0 0 3px var(--ink); }
+.color-swatch:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.color-swatch:disabled { cursor: not-allowed; opacity: .45; }
 .detail-size-picker { margin-bottom: 22px; }
 .size-picker-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 11px; font-weight: 600; }
 .size-guide { font-size: 9px; font-weight: 400; }

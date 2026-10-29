@@ -9,7 +9,36 @@ const products = [
   { id: 8, name: "Robe longue à pois", category: "Robe", displayCategory: "Robe", price: 59, label: "COUP DE CŒUR", color: "#c7b49a", background: "#f0e7d9", image: "robe-longue-a-pois.jpeg" },
   { id: 9, name: "Chemisier bordeaux", category: "Chemisier", displayCategory: "Chemisier", price: 69, label: "NOUVEAUTÉ", color: "#743a46", background: "#f0e8e1", image: "ensemble-bordeaux-ivoire.jpeg" },
   { id: 10, name: "Jupe", category: "Jupe", price: 59, label: "NOUVEAUTÉ", color: "#342c2b", background: "#eee4d7", image: "jupe-longue-noire.png" },
-  { id: 11, name: "Veste", category: "Veste", price: 79, label: "NOUVEAUTÉ", color: "#6685a3", background: "#e9e6df", image: "veste-longue-jean.png" }
+  { id: 11, name: "Veste", category: "Veste", price: 79, label: "NOUVEAUTÉ", color: "#6685a3", background: "#e9e6df", image: "veste-longue-jean.png" },
+  {
+    id: 12,
+    name: "Haut fluide (test couleurs)",
+    category: "Chemisier",
+    displayCategory: "Haut · visuel de test",
+    price: 22,
+    label: "VISUEL DE TEST",
+    color: "#a6968d",
+    background: "#eee9e2",
+    image: "haut-test-taupe.jpg",
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    colors: [
+      { id: "taupe", name: "Taupe", hex: "#a6968d", image: "haut-test-taupe.jpg" },
+      { id: "bleu", name: "Bleu", hex: "#71899a", image: "haut-test-bleu.jpg" },
+      { id: "rose", name: "Rose", hex: "#b88788", image: "haut-test-rose.jpg" }
+    ]
+  },
+  {
+    id: 13,
+    name: "Pantalon fluide (test tailles)",
+    category: "Pantalons",
+    displayCategory: "Pantalon · visuel de test",
+    price: 22,
+    label: "VISUEL DE TEST",
+    color: "#4d3832",
+    background: "#f0e8dc",
+    image: "pantalon-test.jpg",
+    sizes: ["38", "40", "42", "44", "46", "48", "50", "52", "54"]
+  }
 ];
 
 const cart = new Map();
@@ -60,6 +89,7 @@ let activeFilter = "Tout";
 let toastTimer;
 let selectedProduct = null;
 let selectedSize = "";
+let selectedColor = "";
 let detailTrigger = null;
 let guideTab = "measurements";
 let checkoutStage = 1;
@@ -155,8 +185,10 @@ function renderCart() {
   cartEmpty.hidden = quantity !== 0;
   cartItems.hidden = quantity === 0;
   cartItems.innerHTML = entries.map(([key, count]) => {
-    const [productId, size] = key.split("|");
+    const [productId, colorId, size] = key.split("|");
     const product = products.find((item) => item.id === Number(productId));
+    const selectedVariant = product.colors?.find((variant) => variant.id === colorId);
+    const colorDescription = selectedVariant ? `<p class="cart-product-size">Couleur : ${selectedVariant.name}</p>` : "";
     const sizeDescription = size === "Taille unique" ? "" : `<p class="cart-product-size">Taille : ${size}</p>`;
     return `
       <article class="cart-row">
@@ -164,8 +196,9 @@ function renderCart() {
         <div>
           <h3 class="cart-product-name">${product.name}</h3>
           <p class="cart-product-price">${euro(product.price)}</p>
+          ${colorDescription}
           ${sizeDescription}
-          <div class="quantity-control" aria-label="Quantité de ${product.name}${size === "Taille unique" ? "" : `, taille ${size}`}">
+          <div class="quantity-control" aria-label="Quantité de ${product.name}${selectedVariant ? `, couleur ${selectedVariant.name}` : ""}${size === "Taille unique" ? "" : `, taille ${size}`}">
             <button type="button" data-quantity="${key}" data-change="-1" aria-label="Retirer un ${product.name}">−</button>
             <span>${count}</span>
             <button type="button" data-quantity="${key}" data-change="1" aria-label="Ajouter un ${product.name}">+</button>
@@ -177,11 +210,18 @@ function renderCart() {
   }).join("");
 }
 
-function addToCart(product, size) {
-  const key = `${product.id}|${size}`;
+function addToCart(product, size, color = "") {
+  const key = `${product.id}|${color}|${size}`;
   cart.set(key, (cart.get(key) ?? 0) + 1);
   renderCart();
-  showToast(`${product.name} ajouté au panier`);
+  const selectedVariant = product.colors?.find((variant) => variant.id === color);
+  showToast(`${product.name}${selectedVariant ? ` · ${selectedVariant.name}` : ""} ajouté au panier`);
+}
+
+function updateDetailAddButton() {
+  const hasSizes = selectedProduct && (selectedProduct.sizes ? selectedProduct.sizes.length > 0 : !oneSizeCategories.has(selectedProduct.category));
+  const hasColors = Boolean(selectedProduct?.colors?.length);
+  document.querySelector("#detail-add").disabled = Boolean((hasSizes && !selectedSize) || (hasColors && !selectedColor));
 }
 
 function renderCheckoutSummary() {
@@ -209,10 +249,12 @@ function renderCheckoutSummary() {
   document.querySelector("#checkout-summary-delivery").textContent = `Mode de livraison : ${isHomeDelivery ? "À domicile" : "Point relais"}`;
   document.querySelector("#checkout-summary-address").textContent = address;
   document.querySelector("#checkout-summary").innerHTML = entries.map(([key, count]) => {
-    const [productId, size] = key.split("|");
+    const [productId, colorId, size] = key.split("|");
     const product = products.find((item) => item.id === Number(productId));
+    const selectedVariant = product.colors?.find((variant) => variant.id === colorId);
     const sizeDescription = size === "Taille unique" ? "Taille unique" : `Taille ${size}`;
-    return `<div class="checkout-summary-row"><div><strong>${product.name}</strong><span>${sizeDescription} · quantité ${count}</span></div><strong>${euro(product.price * count)}</strong></div>`;
+    const variantDescription = selectedVariant ? `Couleur ${selectedVariant.name} · ` : "";
+    return `<div class="checkout-summary-row"><div><strong>${product.name}</strong><span>${variantDescription}${sizeDescription} · quantité ${count}</span></div><strong>${euro(product.price * count)}</strong></div>`;
   }).join("");
   document.querySelector("#checkout-subtotal").textContent = euro(total);
 }
@@ -258,6 +300,7 @@ function openProductDetail(productId, trigger) {
   const detailAlreadyOpen = productDetail.open;
   selectedProduct = product;
   selectedSize = "";
+  selectedColor = "";
   if (trigger) detailTrigger = trigger;
   document.querySelector("#detail-image").src = product.image;
   document.querySelector("#detail-image").alt = product.name;
@@ -265,13 +308,25 @@ function openProductDetail(productId, trigger) {
   document.querySelector("#detail-category").textContent = product.displayCategory ?? product.category;
   document.querySelector("#detail-name").textContent = product.name;
   document.querySelector("#detail-price").textContent = euro(product.price);
+  const colorPicker = document.querySelector("#detail-color-picker");
+  const colorOptions = document.querySelector("#detail-color-options");
+  const colorSelection = document.querySelector("#detail-color-selection");
   const sizePicker = document.querySelector("#detail-size-picker");
   const sizeList = document.querySelector("#size-option-list");
   const detailAddButton = document.querySelector("#detail-add");
-  const hasSizes = !oneSizeCategories.has(product.category);
+  const hasSizes = product.sizes ? product.sizes.length > 0 : !oneSizeCategories.has(product.category);
+  const hasColors = Boolean(product.colors?.length);
+  colorPicker.hidden = !hasColors;
+  colorOptions.innerHTML = hasColors ? product.colors.map((variant) => `
+    <button class="color-swatch" type="button" data-color="${variant.id}" style="--swatch-color:${variant.hex}" aria-label="${variant.name}" title="${variant.name}" aria-pressed="false"><span class="sr-only">${variant.name}</span></button>
+  `).join("") : "";
+  colorSelection.textContent = hasColors ? "Choisissez une couleur" : "";
   sizePicker.hidden = !hasSizes;
-  sizeList.innerHTML = hasSizes ? clothingSizes.map((size) => `<button class="size-option" type="button" data-size="${size}" aria-pressed="false">${size}</button>`).join("") : "";
-  detailAddButton.disabled = hasSizes;
+  sizeList.innerHTML = hasSizes ? (product.sizes ?? clothingSizes).map((size) => `<button class="size-option" type="button" data-size="${size}" aria-pressed="false"${hasColors ? " disabled" : ""}>${size}</button>`).join("") : "";
+  document.querySelector("#size-availability").textContent = hasColors
+    ? "Choisissez une couleur puis une taille."
+    : "Disponibilité à confirmer auprès de la boutique.";
+  detailAddButton.disabled = hasSizes || hasColors;
   document.querySelectorAll("[data-detail-tab]").forEach((tab) => {
     const selected = tab.dataset.detailTab === "description";
     tab.setAttribute("aria-selected", String(selected));
@@ -499,8 +554,30 @@ document.querySelector("#related-products").addEventListener("click", (event) =>
 
 document.querySelector("#detail-add").addEventListener("click", () => {
   if (!selectedProduct) return;
-  addToCart(selectedProduct, selectedSize || "Taille unique");
+  addToCart(selectedProduct, selectedSize || "Taille unique", selectedColor);
   productDetail.close();
+});
+
+document.querySelector("#detail-color-options").addEventListener("click", (event) => {
+  const colorButton = event.target.closest("[data-color]");
+  if (!colorButton || !selectedProduct) return;
+  selectedColor = colorButton.dataset.color;
+  const selectedVariant = selectedProduct.colors.find((variant) => variant.id === selectedColor);
+  document.querySelectorAll(".color-swatch").forEach((button) => {
+    const selected = button === colorButton;
+    button.classList.toggle("is-selected", selected);
+    button.setAttribute("aria-pressed", String(selected));
+  });
+  document.querySelector("#detail-image").src = selectedVariant.image;
+  document.querySelector("#detail-image").alt = `${selectedProduct.name}, couleur ${selectedVariant.name}`;
+  document.querySelector("#detail-color-selection").textContent = selectedVariant.name;
+  document.querySelectorAll(".size-option").forEach((button) => {
+    button.disabled = false;
+  });
+  document.querySelector("#size-availability").textContent = selectedSize
+    ? `Couleur ${selectedVariant.name} et taille ${selectedSize} sélectionnées · disponibilité à confirmer auprès de la boutique.`
+    : `Couleur ${selectedVariant.name} sélectionnée · choisissez une taille.`;
+  updateDetailAddButton();
 });
 
 document.querySelector("#size-option-list").addEventListener("click", (event) => {
@@ -512,8 +589,9 @@ document.querySelector("#size-option-list").addEventListener("click", (event) =>
     button.classList.toggle("is-selected", selected);
     button.setAttribute("aria-pressed", String(selected));
   });
-  document.querySelector("#detail-add").disabled = false;
-  document.querySelector("#size-availability").textContent = `Taille ${selectedSize} sélectionnée · disponibilité à confirmer auprès de la boutique.`;
+  const selectedVariant = selectedProduct.colors?.find((variant) => variant.id === selectedColor);
+  document.querySelector("#size-availability").textContent = `${selectedVariant ? `Couleur ${selectedVariant.name} et ` : ""}taille ${selectedSize} sélectionnées · disponibilité à confirmer auprès de la boutique.`;
+  updateDetailAddButton();
 });
 
 document.querySelector(".detail-tabs").addEventListener("click", (event) => {
