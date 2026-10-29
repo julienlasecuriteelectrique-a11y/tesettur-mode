@@ -19,6 +19,7 @@ const products = [
     label: "VISUEL DE TEST",
     color: "#a6968d",
     background: "#eee9e2",
+    imageFit: "contain",
     image: "haut-test-taupe.jpg",
     sizes: ["S", "M", "L", "XL", "XXL"],
     colors: [
@@ -112,7 +113,7 @@ function renderProducts() {
 
   productGrid.innerHTML = visibleProducts.map((product) => `
     <article class="product-card">
-      <div class="product-visual${product.image ? " has-image" : ""}" style="--product-color:${product.color};--product-bg:${product.background};--skin:${product.skin}">
+      <div class="product-visual${product.image ? " has-image" : ""}${product.imageFit === "contain" ? " image-contain" : ""}" style="--product-color:${product.color};--product-bg:${product.background};--skin:${product.skin}">
         ${product.image ? `<button class="product-image-trigger" type="button" data-product="${product.id}" aria-label="Voir la fiche de ${product.name}"><img class="product-photo" src="${product.image}" alt="" loading="lazy"></button>` : ""}
         <span class="product-label">${product.label}</span>
         <button class="favorite-toggle" type="button" data-favorite="${product.id}" aria-label="${favorites.has(product.id) ? "Retirer" : "Ajouter"} ${product.name} des favoris" aria-pressed="${favorites.has(product.id)}">
@@ -304,6 +305,7 @@ function openProductDetail(productId, trigger) {
   if (trigger) detailTrigger = trigger;
   document.querySelector("#detail-image").src = product.image;
   document.querySelector("#detail-image").alt = product.name;
+  document.querySelector(".detail-visual").classList.toggle("image-contain", product.imageFit === "contain");
   document.querySelector("#detail-label").textContent = product.label;
   document.querySelector("#detail-category").textContent = product.displayCategory ?? product.category;
   document.querySelector("#detail-name").textContent = product.name;
