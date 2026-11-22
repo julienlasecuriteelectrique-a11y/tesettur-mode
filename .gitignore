@@ -5,5 +5,13 @@
 !haut-test-bleu.jpg
 !haut-test-rose.jpg
 !pantalon-test.jpg
+!photos-jupes/*.jpg
+!photos-chemisiers/*.jpg
+!photos-pulls/*.jpg
+!photos-pantalons/*.jpg
+!photos-robes/*.jpg
+!photos-vestes/*.jpg
+!photos-robes-soiree/*.jpg
+!photos-ensembles/*.jpg
 logo.png
 jupe-veste-look.png

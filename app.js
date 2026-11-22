@@ -1,46 +1,267 @@
-const products = [
-  { id: 1, name: "Sac à main camel", category: "Accessoires", price: 59, label: "SAC", color: "#a9663f", background: "#f2e4d3", image: "sac-a-main-camel.jpeg" },
-  { id: 2, name: "Bijoux dorés", category: "Bijoux", price: 29, label: "BIJOUX", color: "#b58a43", background: "#f2ead8", image: "bijoux-dores.jpeg" },
-  { id: 3, name: "Ensemble maille écru", category: "Ensembles", price: 79, label: "NOUVEAUTÉ", color: "#b2a28b", background: "#f1e8dd", image: "ensemble-maille-ecru.jpeg" },
-  { id: 4, name: "Hijab rose poudré", category: "Hijab", price: 19, label: "ESSENTIEL", color: "#c38b80", background: "#f3e3df", image: "hijab-rose-poudre.png" },
-  { id: 5, name: "Pantalon fluide noir", category: "Pantalons", price: 39, label: "ESSENTIEL", color: "#38312f", background: "#e9e4dc", image: "pantalon-fluide-noir.jpeg" },
-  { id: 6, name: "Pull maille écru", category: "Pulls", price: 49, label: "DOUCEUR", color: "#c7b4a0", background: "#f1e7df", image: "pull-maille-ecru.jpeg" },
-  { id: 7, name: "Robe de soirée", category: "Robe de soirée", displayCategory: "Robe de soirée", price: 89, label: "OCCASION", color: "#d0b8a8", background: "#f3e5dc", image: "robe-soiree-perlee.jpeg" },
-  { id: 8, name: "Robe longue à pois", category: "Robe", displayCategory: "Robe", price: 59, label: "COUP DE CŒUR", color: "#c7b49a", background: "#f0e7d9", image: "robe-longue-a-pois.jpeg" },
-  { id: 9, name: "Chemisier bordeaux", category: "Chemisier", displayCategory: "Chemisier", price: 69, label: "NOUVEAUTÉ", color: "#743a46", background: "#f0e8e1", image: "ensemble-bordeaux-ivoire.jpeg" },
-  { id: 10, name: "Jupe", category: "Jupe", price: 59, label: "NOUVEAUTÉ", color: "#342c2b", background: "#eee4d7", image: "jupe-longue-noire.png" },
-  { id: 11, name: "Veste", category: "Veste", price: 79, label: "NOUVEAUTÉ", color: "#6685a3", background: "#e9e6df", image: "veste-longue-jean.png" },
-  {
-    id: 12,
-    name: "Haut fluide (test couleurs)",
-    category: "Chemisier",
-    displayCategory: "Haut · visuel de test",
-    price: 22,
-    label: "VISUEL DE TEST",
-    color: "#a6968d",
-    background: "#eee9e2",
-    imageFit: "contain",
-    image: "haut-test-taupe.jpg",
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    colors: [
-      { id: "taupe", name: "Taupe", hex: "#a6968d", image: "haut-test-taupe.jpg" },
-      { id: "bleu", name: "Bleu", hex: "#71899a", image: "haut-test-bleu.jpg" },
-      { id: "rose", name: "Rose", hex: "#b88788", image: "haut-test-rose.jpg" }
-    ]
-  },
-  {
-    id: 13,
-    name: "Pantalon fluide (test tailles)",
-    category: "Pantalons",
-    displayCategory: "Pantalon · visuel de test",
-    price: 22,
-    label: "VISUEL DE TEST",
-    color: "#4d3832",
-    background: "#f0e8dc",
-    image: "pantalon-test.jpg",
-    sizes: ["38", "40", "42", "44", "46", "48", "50", "52", "54"]
-  }
+const products = [];
+
+const skirtPreview = [
+  ["Jupe longue noire effet cuir", 22, ["Taille unique"]],
+  ["Jupe longue noire à plis", 22, ["Taille unique"]],
+  ["Jupe longue noire fluide", 18, ["Taille unique"]],
+  ["Jupe longue évasée marron", 22, ["38"]],
+  ["Jupe longue satinée écrue", 18, ["S", "M", "L", "XL"]],
+  ["Jupe longue satinée rouge", 18, ["S", "M", "L", "XL"]],
+  ["Jupe longue droite gris bleuté", 20, ["42", "44", "46"]],
+  ["Jupe longue noire à volants", 24, ["S", "M", "L", "XL"]],
+  ["Jupe longue vert olive à volants", 24, ["S", "M", "L", "XL"]],
+  ["Jupe longue droite bleu roi", 20, ["40", "42", "44", "46", "48"]],
+  ["Jupe longue plissée camel", 22, ["38", "40"]],
+  ["Jupe longue droite noire", 20, ["42"]],
+  ["Jupe longue plissée noire", 22, ["38", "40"]],
+  ["Jupe longue noire à passants", 22, ["40"]],
+  ["Jupe longue bleu marine à passants", 22, ["42"]],
+  ["Jupe longue droite marron", 22, ["42", "44"]],
+  ["Jupe longue noire drapée effet cuir", 26, ["M"]],
+  ["Jupe longue en tulle camel", 22, ["Taille unique"]],
+  ["Jupe longue en tulle noire", 22, ["Taille unique"]],
+  ["Jupe longue camel effet daim", 26, ["XL"]]
 ];
+
+skirtPreview.forEach(([name, price, sizes], index) => {
+  const reference = index + 1;
+  const images = [1, 2, 3].map((view) => `photos-jupes/${reference}-${view}.jpg`);
+  products.push({
+    id: 100 + reference, name, category: "Jupe", price, sizes, images, stockPreview: true,
+    image: images[0], imageFit: "contain", label: "APERÇU",
+    color: "#342c2b", background: "#eee4d7"
+  });
+});
+
+const blousePreview = [
+  [2, "Haut noir à manches longues", 18, ["Taille unique"]],
+  [3, "Haut beige à manches longues", 18, ["Taille unique"]],
+  [4, "Chemisier blanc à col noué", 20, ["40", "42", "44"]],
+  [5, "Chemisier noir à col noué", 20, ["38", "40", "42", "44"]],
+  [6, "Haut noir côtelé à col montant", 10, ["Taille unique"]],
+  [7, "Haut bordeaux à manches longues", 18, ["Taille unique"]],
+  [8, "Body blanc à manches longues", 18, ["Taille unique"]],
+  [9, "Body vert kaki à manches longues", 18, ["Taille unique"]],
+  [10, "Chemisier noir noué à la taille", 20, ["S", "M", "L", "XL", "XXL", "3XL"]],
+  [11, "Chemisier blanc noué à la taille", 20, ["S", "M", "L", "XL", "XXL", "3XL"]],
+  [12, "Chemisier bleu clair à manches bouffantes", 20, ["38", "42", "44", "46"]],
+  [13, "Chemise longue bleue à fines rayures", 25, ["L", "XL"]],
+  [14, "Chemise longue rose à fines rayures", 25, ["S", "M", "L", "XL"]],
+  [15, "Chemise jaune à fines rayures et poches", 25, ["S", "M"]],
+  [16, "Chemise noire à manches retroussables", 20, ["Taille unique"]],
+  [17, "Chemise longue blanche", 22, ["Taille unique"]],
+  [18, "Chemise ample bleu roi", 20, ["Taille unique"]],
+  [19, "Chemise ample beige", 22, ["Taille unique"]],
+  [20, "Chemise longue bleue à rayures", 25, ["Taille unique"]],
+  [21, "Chemise ample noire", 22, ["Taille unique"]],
+  [22, "Chemisier jaune à manches bouffantes", 20, ["42", "44", "46"]],
+  [23, "Chemisier bleu noué à la taille", 20, ["S", "M", "L", "XL", "XXL"]],
+  [24, "Chemise longue kaki", 25, ["42", "44", "48", "52"]],
+  [25, "Chemise longue bleu clair", 25, ["44", "46", "48", "50", "52"]],
+  [26, "Haut beige noué à la taille", 20, ["42", "44", "46"]],
+  [27, "Haut noir noué à la taille", 20, ["38", "40", "46"]],
+  [31, "Haut jaune pâle cache-cœur", 25, ["S", "M", "L", "XL"]],
+  [32, "Haut noir à broderies florales", 25, ["S", "M"]],
+  [33, "Chemise à carreaux bleu marine", 25, ["Taille unique"]],
+  [34, "Chemise à carreaux bordeaux", 25, ["Taille unique"]]
+];
+
+blousePreview.forEach(([reference, name, price, sizes]) => {
+  const images = [1, 2, 3].map((view) => `photos-chemisiers/${reference}-${view}.jpg`);
+  products.push({
+    id: 200 + reference, name, category: "Chemisier", price, sizes, images, stockPreview: true,
+    image: images[0], imageFit: "contain", label: "APERÇU",
+    color: "#342c2b", background: "#eee4d7"
+  });
+});
+
+const sweaterPreview = [
+  ["Gilet rayé marron et écru à boutons", 18, ["Taille unique"]],
+  ["Gilet marron à nœuds noirs", 25, ["Taille unique"]],
+  ["Sweat ample marron", 18, ["Taille unique"]],
+  ["Sweat ample noir", 18, ["Taille unique"]],
+  ["Sweat ample camel", 18, ["Taille unique"]],
+  ["Pull jaune à col V et manches courtes", 18, ["Taille unique"]],
+  ["Pull rose à col V et manches courtes", 18, ["Taille unique"]],
+  ["Pull noir à col V et manches courtes", 18, ["Taille unique"]],
+  ["Pull ample camel en maille", 22, ["Taille unique"]],
+  ["Pull gris anthracite à col roulé", 22, ["Taille unique"]],
+  ["Haut marron à manches longues", 20, ["1", "2"]],
+  ["Haut beige à manches longues", 20, ["2"]],
+  ["Haut noir à manches longues", 20, ["1", "2"]]
+];
+
+sweaterPreview.forEach(([name, price, sizes], index) => {
+  const reference = index + 1;
+  const images = [1, 2, 3].map((view) => `photos-pulls/${reference}-${view}.jpg`);
+  products.push({
+    id: 300 + reference, name, category: "Pulls", price, sizes, images, stockPreview: true,
+    image: images[0], imageFit: "contain", label: "APERÇU",
+    color: "#342c2b", background: "#eee4d7"
+  });
+});
+
+const trousersPreview = [
+  ["Pantalon noir à taille élastique", 22, ["38", "40", "42", "44", "46", "48", "54"]],
+  ["Pantalon beige à taille élastique", 22, ["38", "42", "44", "46", "50", "52", "54"]],
+  ["Pantalon blanc à taille élastique", 22, ["38", "40", "42", "44", "46", "48", "50", "52", "54"]],
+  ["Pantalon large jaune à cordon", 24, ["38", "42", "44", "46", "48"]],
+  ["Pantalon large kaki à cordon", 24, ["38", "40", "42", "44"]],
+  ["Pantalon large noir à cordon", 22, ["38", "40"]],
+  ["Pantalon large beige à cordon blanc", 22, ["Taille unique"]],
+  ["Pantalon large beige clair à cordon", 22, ["Taille unique"]],
+  ["Pantalon large marron à cordon", 22, ["Taille unique"]],
+  ["Pantalon large gris chiné à cordon", 22, ["Taille unique"]],
+  ["Pantalon bleu marine à cordon blanc", 22, ["Taille unique"]],
+  ["Pantalon droit taupe à cordon", 22, ["Taille unique"]],
+  ["Pantalon droit kaki à cordon", 22, ["Taille unique"]],
+  ["Jean large à imprimé léopard", 25, ["40", "42"]],
+  ["Jean large bleu foncé", 25, ["36", "40", "42"]],
+  ["Jean large bleu délavé", 25, ["36", "38"]]
+];
+
+trousersPreview.forEach(([name, price, sizes], index) => {
+  const reference = index + 1;
+  const images = [1, 2, 3].map((view) => `photos-pantalons/${reference}-${view}.jpg`);
+  products.push({
+    id: 400 + reference, name, category: "Pantalons", price, sizes, images, stockPreview: true,
+    image: images[0], imageFit: "contain", label: "APERÇU",
+    color: "#342c2b", background: "#eee4d7"
+  });
+});
+
+const dressPreview = [
+  [1, "Robe jaune à pois et volants", 40, ["42", "44"]],
+  [2, "Robe satinée prune à col montant", 60, ["38", "40", "42", "44"]],
+  [3, "Robe bordeaux à manches bouffantes", 45, ["50", "52", "54"]],
+  [4, "Robe noire à manches bouffantes", 45, ["44", "50", "52", "54"]],
+  [5, "Robe verte à col montant", 45, ["38", "42", "44"]],
+  [6, "Robe jaune à col montant", 45, ["38", "40", "42", "44"]],
+  [7, "Robe rose à col montant et volant", 40, ["38", "40", "42", "44"]],
+  [8, "Robe jaune à col montant et volant", 40, ["38", "40", "42", "44"]],
+  [11, "Robe marron à drapé asymétrique", 45, ["38", "40", "42", "44"]],
+  [12, "Robe taupe à drapé asymétrique", 45, ["38", "40", "42", "44"]],
+  [13, "Robe noire à boutons et volants", 45, ["38", "40", "42", "44"]],
+  [14, "Robe noire à col orné", 40, ["42", "46", "48"]],
+  [15, "Robe marron à manches plissées", 40, ["50"]],
+  [16, "Robe chemise jaune", 35, ["S", "M", "L", "XL"]],
+  [17, "Robe chemise rose", 35, ["S", "M", "L", "XL"]],
+  [18, "Robe chemise bleu clair", 35, ["S", "M", "L", "XL"]],
+  [19, "Robe noire en maille à col montant", 30, ["50"]],
+  [20, "Robe pull noire à col montant", 25, ["Taille unique"]],
+  [21, "Robe pull écrue à col montant", 25, ["Taille unique"]],
+  [22, "Robe pull beige à col montant", 25, ["Taille unique"]],
+  [23, "Robe pull rose fuchsia à col montant", 25, ["Taille unique"]],
+  [24, "Robe pull bleue à col montant", 25, ["Taille unique"]],
+  [25, "Robe longue noire sans manches", 25, ["Taille unique"]],
+  [26, "Robe longue blanche sans manches", 25, ["Taille unique"]],
+  [27, "Robe noire zippée à effet cape", 30, ["Taille unique"]],
+  [28, "Robe marron zippée à effet cape", 30, ["Taille unique"]],
+  [29, "Robe noire zippée à manches contrastées", 30, ["40", "42"]],
+  [30, "Robe noire zippée à nouer", 30, ["48", "52"]],
+  [31, "Robe bleue zippée à col montant", 30, ["46", "52", "56"]],
+  [32, "Robe noire ample à col montant", 30, ["50"]],
+  [33, "Robe pull noire ample", 28, ["Taille unique"]],
+  [34, "Robe pull marron côtelée", 30, ["Taille unique"]],
+  [35, "Robe pull verte côtelée", 30, ["Taille unique"]],
+  [36, "Robe pull camel côtelée", 30, ["Taille unique"]],
+  [37, "Robe pull bleu roi côtelée", 30, ["Taille unique"]],
+  [38, "Robe pull noire côtelée", 30, ["Taille unique"]]
+];
+
+dressPreview.forEach(([reference, name, price, sizes]) => {
+  const images = [1, 2, 3].map((view) => `photos-robes/${reference}-${view}.jpg`);
+  products.push({
+    id: 500 + reference, name, category: "Robe", price, sizes, images, stockPreview: true,
+    image: images[0], imageFit: "contain", label: "APERÇU",
+    color: "#342c2b", background: "#eee4d7"
+  });
+});
+
+const jacketPreview = [
+  ["Veste courte écrue effet fourrure", 30, ["M", "L"]],
+  ["Veste longue en jean à capuche", 35, ["38", "40", "42", "44"]],
+  ["Cape courte taupe ceinturée", 20, ["Taille unique"]],
+  ["Cape courte noire ceinturée", 20, ["Taille unique"]],
+  ["Veste blazer camel", 25, ["S", "L", "XL", "XXL"]],
+  ["Gilet marron sans manches à boutons dorés", 18, ["S", "M"]],
+  ["Veste kaki à capuche et cordon", 25, ["Taille unique"]],
+  ["Manteau noir à nouer", 45, ["Taille unique"]],
+  ["Manteau marron à nouer", 45, ["Taille unique"]],
+  ["Veste zippée kaki à col contrasté", 26, ["Taille unique"]],
+  ["Veste longue noire à nouer", 36, ["Taille unique"]],
+  ["Veste longue en jean gris ceinturée", 40, ["Taille unique"]],
+  ["Veste en jean bleu ceinturée", 28, ["S", "M", "L"]],
+  ["Veste en jean bleu sans manches", 28, ["S", "M"]],
+  ["Veste courte noire à col croisé", 26, ["Taille unique"]],
+  ["Blouson beige zippé", 26, ["Taille unique"]],
+  ["Blouson marron zippé", 26, ["Taille unique"]],
+  ["Gilet kaki sans manches", 22, ["Taille unique"]],
+  ["Gilet gris sans manches", 22, ["Taille unique"]],
+  ["Gilet taupe sans manches", 22, ["Taille unique"]],
+  ["Gilet beige sans manches effet fourrure", 22, ["M"]],
+  ["Veste beige sans manches à nouer", 25, ["Taille unique"]],
+  ["Gilet noir sans manches effet fourrure", 22, ["S", "M"]],
+  ["Veste courte écrue à boutons", 22, ["Taille unique"]],
+  ["Manteau long écru à col montant", 30, ["Taille unique"]],
+  ["Manteau long gris à col montant", 30, ["Taille unique"]],
+  ["Veste courte noire à boutons contrastés", 22, ["Taille unique"]]
+];
+
+jacketPreview.forEach(([name, price, sizes], index) => {
+  const reference = index + 1;
+  const images = [1, 2, 3].map((view) => `photos-vestes/${reference}-${view}.jpg`);
+  products.push({
+    id: 600 + reference, name, category: "Veste", price, sizes, images, stockPreview: true,
+    image: images[0], imageFit: "contain", label: "APERÇU",
+    color: "#342c2b", background: "#eee4d7"
+  });
+});
+
+const eveningDressPreview = [
+  ["Robe de soirée marron à motifs brillants", 70, ["42", "44", "48", "52"]],
+  ["Robe de soirée noire à motifs brillants", 70, ["52"]],
+  ["Robe de soirée noire plissée à volants", 80, ["38", "40", "42"]],
+  ["Robe de soirée champagne à paillettes", 130, ["38", "42", "44"]],
+  ["Robe de soirée noire à haut orné", 170, ["48", "50", "52"]],
+  ["Robe de soirée écrue à ornements brillants", 170, ["38", "42", "44"]],
+  ["Robe de soirée rose à ornements brillants", 170, ["40", "42", "44"]],
+  ["Robe de soirée marron à col montant", 60, ["38", "40", "42", "44"]],
+  ["Robe de soirée prune drapée à strass", 140, ["38", "40", "42", "44"]],
+  ["Robe de soirée bleu marine en dentelle", 130, ["38", "40", "42", "44"]],
+  ["Robe de soirée métallisée à drapé", 130, ["38", "40", "42", "44", "46"]]
+];
+
+eveningDressPreview.forEach(([name, price, sizes], index) => {
+  const reference = index + 1;
+  const views = reference === 9 ? [1] : [1, 2, 3];
+  const images = views.map((view) => `photos-robes-soiree/${reference}-${view}.jpg`);
+  products.push({
+    id: 700 + reference, name, category: "Robe de soirée", price, sizes, images, stockPreview: true,
+    image: images[0], imageFit: "contain", label: "APERÇU",
+    color: "#342c2b", background: "#eee4d7"
+  });
+});
+
+const outfitPreview = [
+  ["Ensemble gris tunique à volant et pantalon", 30, ["46", "48"]],
+  ["Ensemble noir tunique à volant et pantalon", 30, ["48", "50"]],
+  ["Ensemble beige tunique à volant et pantalon", 30, ["44", "46", "48", "50"]],
+  ["Ensemble gris en maille à tunique fendue", 34, ["Taille unique"]],
+  ["Ensemble noir à capuche et pantalon", 34, ["Taille unique"]],
+  ["Ensemble robe marron et haut blanc", 45, ["38", "40", "42", "44"]],
+  ["Ensemble robe bleu marine et haut blanc", 45, ["38", "40", "42", "44"]]
+];
+
+outfitPreview.forEach(([name, price, sizes], index) => {
+  const reference = index + 1;
+  const images = [1, 2, 3].map((view) => `photos-ensembles/${reference}-${view}.jpg`);
+  products.push({
+    id: 800 + reference, name, category: "Ensembles", price, sizes, images, stockPreview: true,
+    image: images[0], imageFit: "contain", label: "APERÇU",
+    color: "#342c2b", background: "#eee4d7"
+  });
+});
 
 const cart = new Map();
 const oneSizeCategories = new Set(["Accessoires", "Bijoux", "Hijab"]);
@@ -92,6 +313,9 @@ let selectedProduct = null;
 let selectedSize = "";
 let selectedColor = "";
 let detailTrigger = null;
+let selectedImageIndex = 0;
+let imageSlideshowTimer;
+let imageSwipeStart = null;
 let guideTab = "measurements";
 let checkoutStage = 1;
 
@@ -124,6 +348,7 @@ function renderProducts() {
         <div><h3><button class="product-title-trigger" type="button" data-product="${product.id}">${product.name}</button></h3><p class="product-category">${product.displayCategory ?? product.category}</p></div>
         <p class="product-price">${euro(product.price)}</p>
       </div>
+      ${product.stockPreview ? `<div class="product-availability"><p>Tailles : ${product.sizes.join(", ")}</p><p><span class="stock-dot" aria-hidden="true"></span>Stock à confirmer</p></div>` : ""}
       <button class="add-button" type="button" data-product="${product.id}"><span>Choisir les options</span><span aria-hidden="true">↗</span></button>
     </article>
   `).join("");
@@ -161,7 +386,9 @@ function renderRecommendations(product) {
     .filter(Boolean)
     .slice(0, 3);
 
-  document.querySelector("#related-products").innerHTML = relatedProducts.map((relatedProduct) => `
+  const container = document.querySelector("#related-products");
+  container.parentElement.hidden = relatedProducts.length === 0;
+  container.innerHTML = relatedProducts.map((relatedProduct) => `
     <button class="related-product" type="button" data-related-product="${relatedProduct.id}" aria-label="Voir ${relatedProduct.name}">
       <img src="${relatedProduct.image}" alt="" loading="lazy">
       <span class="related-product-name">${relatedProduct.name}</span>
@@ -294,17 +521,50 @@ function updateDeliveryMethod(method) {
     : "Le point relais et sa disponibilité seront confirmés avant le paiement.";
 }
 
+function showDetailImage(index) {
+  if (!selectedProduct?.images?.length) return;
+  const images = selectedProduct.images;
+  selectedImageIndex = (index + images.length) % images.length;
+  const image = document.querySelector("#detail-image");
+  image.src = images[selectedImageIndex];
+  image.alt = `${selectedProduct.name}, photo ${selectedImageIndex + 1}`;
+  document.querySelector("#detail-image-arrows [data-image-direction='-1'] img").src = images[(selectedImageIndex + images.length - 1) % images.length];
+  document.querySelector("#detail-image-arrows [data-image-direction='1'] img").src = images[(selectedImageIndex + 1) % images.length];
+}
+
+function scheduleImageSlideshow(delay) {
+  clearTimeout(imageSlideshowTimer);
+  if (!selectedProduct?.images || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  imageSlideshowTimer = setTimeout(() => {
+    if (!productDetail.open) return;
+    const visual = document.querySelector(".detail-visual");
+    if (document.hidden || visual.querySelector(":focus-visible")) {
+      scheduleImageSlideshow(1000);
+      return;
+    }
+    showDetailImage(selectedImageIndex + 1);
+    scheduleImageSlideshow(5000);
+  }, delay);
+}
+
 function openProductDetail(productId, trigger) {
   const product = products.find((item) => item.id === productId);
   if (!product) return;
 
   const detailAlreadyOpen = productDetail.open;
+  clearTimeout(imageSlideshowTimer);
   selectedProduct = product;
   selectedSize = "";
   selectedColor = "";
   if (trigger) detailTrigger = trigger;
   document.querySelector("#detail-image").src = product.image;
   document.querySelector("#detail-image").alt = product.name;
+  const hasGallery = product.images?.length > 1;
+  document.querySelector("#detail-image-arrows").hidden = !hasGallery;
+  document.querySelector(".detail-visual").classList.toggle("gallery-active", hasGallery);
+  selectedImageIndex = 0;
+  if (hasGallery) showDetailImage(0);
+  if (hasGallery) scheduleImageSlideshow(5000);
   document.querySelector(".detail-visual").classList.toggle("image-contain", product.imageFit === "contain");
   document.querySelector("#detail-label").textContent = product.label;
   document.querySelector("#detail-category").textContent = product.displayCategory ?? product.category;
@@ -505,6 +765,8 @@ productDetail.addEventListener("click", (event) => {
   if (event.target === productDetail) productDetail.close();
 });
 productDetail.addEventListener("close", () => {
+  clearTimeout(imageSlideshowTimer);
+  imageSwipeStart = null;
   detailTrigger?.focus();
   detailTrigger = null;
 });
@@ -558,6 +820,32 @@ document.querySelector("#detail-add").addEventListener("click", () => {
   if (!selectedProduct) return;
   addToCart(selectedProduct, selectedSize || "Taille unique", selectedColor);
   productDetail.close();
+});
+
+document.querySelector("#detail-image-arrows").addEventListener("click", (event) => {
+  const button = event.target.closest("[data-image-direction]");
+  if (!button) return;
+  showDetailImage(selectedImageIndex + Number(button.dataset.imageDirection));
+  scheduleImageSlideshow(20000);
+});
+
+const detailVisual = document.querySelector(".detail-visual");
+detailVisual.addEventListener("pointerdown", (event) => {
+  if (!selectedProduct?.images || event.target !== document.querySelector("#detail-image") || !event.isPrimary) return;
+  imageSwipeStart = { x: event.clientX, y: event.clientY, pointerId: event.pointerId };
+  detailVisual.setPointerCapture(event.pointerId);
+});
+detailVisual.addEventListener("pointerup", (event) => {
+  if (!imageSwipeStart || event.pointerId !== imageSwipeStart.pointerId) return;
+  const deltaX = event.clientX - imageSwipeStart.x;
+  const deltaY = event.clientY - imageSwipeStart.y;
+  imageSwipeStart = null;
+  if (Math.abs(deltaX) < 45 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
+  showDetailImage(selectedImageIndex + (deltaX < 0 ? 1 : -1));
+  scheduleImageSlideshow(20000);
+});
+detailVisual.addEventListener("pointercancel", () => {
+  imageSwipeStart = null;
 });
 
 document.querySelector("#detail-color-options").addEventListener("click", (event) => {

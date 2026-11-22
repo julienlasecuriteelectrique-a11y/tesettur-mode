@@ -138,8 +138,12 @@
       <button class="detail-close" id="close-product-detail" type="button" aria-label="Fermer la fiche produit">×</button>
       <div class="product-detail-layout">
         <div class="detail-visual">
-          <img id="detail-image" src="" alt="">
+          <img id="detail-image" src="" alt="" draggable="false">
           <span class="product-label" id="detail-label"></span>
+          <div class="detail-image-arrows" id="detail-image-arrows" hidden>
+            <button type="button" data-image-direction="-1" aria-label="Photo précédente"><img alt="" draggable="false"><span aria-hidden="true">‹</span></button>
+            <button type="button" data-image-direction="1" aria-label="Photo suivante"><img alt="" draggable="false"><span aria-hidden="true">›</span></button>
+          </div>
         </div>
         <div class="detail-copy">
           <p class="eyebrow">TESETTÜR MODE · SÉLECTION</p>
@@ -268,6 +272,23 @@
               <label class="field-wide">Instructions pour le livreur (facultatif)<textarea name="deliveryNotes" rows="3"></textarea></label>
             </div>
             <div class="checkout-fields delivery-fields" id="relay-delivery-fields" hidden>
+              <div class="relay-map-preview field-wide">
+                <div class="relay-map-heading"><strong>Choisir un point relais</strong><span>APERÇU</span></div>
+                <div class="relay-map-illustration" aria-hidden="true">
+                  <svg viewBox="0 0 600 220" preserveAspectRatio="xMidYMid slice">
+                    <rect width="600" height="220" fill="#ece9df"></rect>
+                    <path d="M-20 165 L160 20 M100 240 L340 -20 M310 240 L550 -20 M460 245 L630 65 M-20 65 L620 195 M-20 125 L620 20 M70 -20 L610 150" fill="none" stroke="#fffdf8" stroke-width="12"></path>
+                    <path d="M-20 165 L160 20 M100 240 L340 -20 M310 240 L550 -20 M460 245 L630 65 M-20 65 L620 195 M-20 125 L620 20 M70 -20 L610 150" fill="none" stroke="#d4d0c4" stroke-width="1"></path>
+                    <g fill="#813d4d" stroke="#fffdf8" stroke-width="3">
+                      <path d="M132 76a13 13 0 1 1 26 0c0 11-13 22-13 22s-13-11-13-22z"></path>
+                      <path d="M288 115a13 13 0 1 1 26 0c0 11-13 22-13 22s-13-11-13-22z"></path>
+                      <path d="M447 66a13 13 0 1 1 26 0c0 11-13 22-13 22s-13-11-13-22z"></path>
+                    </g>
+                  </svg>
+                  <span>Carte fictive</span>
+                </div>
+                <p>Maquette uniquement : ces repères ne correspondent pas à des relais réels. La carte et les disponibilités seront ajoutées après le choix du transporteur.</p>
+              </div>
               <label class="field-wide">Point relais souhaité (nom ou adresse)<input name="relayAddress" autocomplete="off" required disabled></label>
             </div>
             <p class="checkout-hint" id="delivery-method-hint">Les frais et délais de livraison seront confirmés avant le paiement.</p>
