@@ -6,8 +6,8 @@
     <meta name="theme-color" content="#f8f6f1">
     <meta name="description" content="Découvrez une sélection de vêtements modestes et élégants pour femme.">
     <title>Tesettür Mode — La modestie, avec allure</title>
-    <link rel="stylesheet" href="style.css?v=full-photo-2">
-    <script src="app.js?v=full-photo-2" defer></script>
+    <link rel="stylesheet" href="style.css?v=cart-1">
+    <script src="app.js?v=cart-1" defer></script>
   </head>
   <body>
     <div class="announcement"><span>Une mode pensée pour durer</span><span>Retrouvez-nous au cœur d’Alès</span></div>
@@ -107,10 +107,10 @@
         <p>Recevez les nouvelles pièces et les actualités de la boutique.</p>
         <form id="newsletter-form">
           <label class="sr-only" for="newsletter-email">Votre adresse e-mail</label>
-          <input id="newsletter-email" type="email" placeholder="Votre adresse e-mail" required>
-          <button type="submit" aria-label="S'inscrire à la newsletter">S’inscrire <span aria-hidden="true">→</span></button>
+          <input id="newsletter-email" type="email" placeholder="Votre adresse e-mail" disabled>
+          <button type="submit" aria-label="S'inscrire à la newsletter" disabled>S’inscrire <span aria-hidden="true">→</span></button>
         </form>
-        <p class="form-message" id="newsletter-message" aria-live="polite"></p>
+        <p class="form-message" id="newsletter-message">Les inscriptions ne sont pas encore ouvertes.</p>
       </section>
     </main>
 
@@ -131,7 +131,7 @@
           </a>
         </div>
       </div>
-      <div class="footer-bottom"><small>© <span id="year"></span> Tesettür Mode · Alès</small><a href="#boutique">La boutique</a><a href="#collection">Les collections</a></div>
+      <div class="footer-bottom"><small>© <span id="year"></span> Tesettür Mode · Alès</small><a href="#boutique">La boutique</a><a href="#collection">Les collections</a><a href="informations.html">Informations légales (en préparation)</a></div>
     </footer>
 
     <dialog class="product-detail" id="product-detail" aria-labelledby="detail-name">

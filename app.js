@@ -280,6 +280,7 @@ const recommendationCategories = {
   "Veste": ["Pantalons", "Pulls", "Jupe"]
 };
 const favoriteStorageKey = "tesettur-mode-favorites";
+const cartStorageKey = "tesettur-mode-cart";
 
 function readFavorites() {
   try {
@@ -441,9 +442,60 @@ function renderCart() {
 function addToCart(product, size, color = "") {
   const key = `${product.id}|${color}|${size}`;
   cart.set(key, (cart.get(key) ?? 0) + 1);
+  const saved = saveCart();
   renderCart();
   const selectedVariant = product.colors?.find((variant) => variant.id === color);
-  showToast(`${product.name}${selectedVariant ? ` · ${selectedVariant.name}` : ""} ajouté au panier`);
+  if (saved) showToast(`${product.name}${selectedVariant ? ` · ${selectedVariant.name}` : ""} ajouté au panier`);
+}
+
+function saveCart() {
+  try {
+    localStorage.setItem(cartStorageKey, JSON.stringify([...cart.entries()]));
+    return true;
+  } catch {
+    showToast("Le panier ne peut pas être mémorisé sur cet appareil.");
+    return false;
+  }
+}
+
+function restoreCart() {
+  let savedEntries;
+  try {
+    const stored = localStorage.getItem(cartStorageKey);
+    if (stored === null) return;
+    savedEntries = JSON.parse(stored);
+  } catch {
+    showToast("Le panier enregistré ne peut pas être lu sur cet appareil.");
+    return;
+  }
+
+  if (!Array.isArray(savedEntries)) {
+    showToast("Le panier enregistré est invalide et n’a pas pu être restauré.");
+    return;
+  }
+
+  let invalidEntry = false;
+  savedEntries.forEach((entry) => {
+    if (!Array.isArray(entry) || entry.length !== 2 || typeof entry[0] !== "string"
+      || !Number.isSafeInteger(entry[1]) || entry[1] <= 0) {
+      invalidEntry = true;
+      return;
+    }
+    const [key, count] = entry;
+    const parts = key.split("|");
+    const [id, color, size] = parts;
+    const product = products.find((item) => String(item.id) === id);
+    const sizes = product?.sizes ?? (product && !oneSizeCategories.has(product.category) ? clothingSizes : ["Taille unique"]);
+    const validColor = product?.colors?.length
+      ? product.colors.some((variant) => variant.id === color)
+      : color === "";
+    if (parts.length !== 3 || !product || !sizes.includes(size) || !validColor || cart.has(key)) {
+      invalidEntry = true;
+      return;
+    }
+    cart.set(key, count);
+  });
+  if (invalidEntry) showToast("Certains articles enregistrés ne sont plus disponibles dans le catalogue.");
 }
 
 function updateDetailAddButton() {
@@ -723,6 +775,7 @@ cartItems.addEventListener("click", (event) => {
   const removeButton = event.target.closest("[data-remove]");
   if (removeButton) {
     cart.delete(removeButton.dataset.remove);
+    saveCart();
     renderCart();
     return;
   }
@@ -733,6 +786,7 @@ cartItems.addEventListener("click", (event) => {
   const nextQuantity = (cart.get(key) ?? 0) + Number(quantityButton.dataset.change);
   if (nextQuantity <= 0) cart.delete(key);
   else cart.set(key, nextQuantity);
+  saveCart();
   renderCart();
 });
 
@@ -983,12 +1037,7 @@ document.querySelector("#chat-form").addEventListener("submit", (event) => {
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && !chatPanel.hidden) setChatOpen(false);
 });
-document.querySelector("#newsletter-form").addEventListener("submit", (event) => {
-  event.preventDefault();
-  document.querySelector("#newsletter-message").textContent = "Merci ! L’inscription à la newsletter sera disponible lors de la mise en ligne.";
-  event.currentTarget.reset();
-});
-
 document.querySelector("#year").textContent = new Date().getFullYear();
 renderProducts();
+restoreCart();
 renderCart();
