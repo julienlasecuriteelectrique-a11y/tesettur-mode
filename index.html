@@ -6,8 +6,8 @@
     <meta name="theme-color" content="#f8f6f1">
     <meta name="description" content="Découvrez une sélection de vêtements modestes et élégants pour femme.">
     <title>Tesettür Mode — La modestie, avec allure</title>
-    <link rel="stylesheet" href="style.css?v=cart-1">
-    <script src="app.js?v=cart-1" defer></script>
+    <link rel="stylesheet" href="style.css?v=selection-1">
+    <script src="app.js?v=selection-1" defer></script>
   </head>
   <body>
     <div class="announcement"><span>Une mode pensée pour durer</span><span>Retrouvez-nous au cœur d’Alès</span></div>
@@ -79,7 +79,7 @@
           <p class="section-aside">Des coupes faciles à vivre,<br>des détails qui font la différence.</p>
         </div>
         <div class="filter-list" role="group" aria-label="Filtrer les produits">
-          <button class="filter-button is-active" type="button" data-filter="Tout" aria-pressed="true">Tout voir</button>
+          <button class="filter-button is-active" type="button" data-filter="Tout" aria-pressed="true">Sélection</button>
           <button class="filter-button" type="button" data-filter="Favoris" aria-pressed="false">Favoris</button>
           <button class="filter-button" type="button" data-filter="Robe" aria-pressed="false">Robes</button>
           <button class="filter-button" type="button" data-filter="Ensembles" aria-pressed="false">Ensembles</button>
@@ -87,6 +87,11 @@
           <button class="filter-button" type="button" data-filter="Accessoires" aria-pressed="false">Accessoires</button>
         </div>
         <div class="product-grid" id="product-grid"></div>
+        <div class="collection-more" id="collection-more" hidden>
+          <p id="product-count" aria-live="polite"></p>
+          <button class="button button-light" id="show-more-products" type="button" aria-controls="product-grid">Voir plus d’articles <span aria-hidden="true">↓</span></button>
+          <a class="button button-light" id="explore-categories" href="#categories" hidden>Explorer les catégories <span aria-hidden="true">↗</span></a>
+        </div>
         <p class="empty-results" id="empty-results" hidden>Aucun article ne correspond à votre recherche.</p>
       </section>
 

@@ -295,6 +295,10 @@ const favorites = readFavorites();
 const productGrid = document.querySelector("#product-grid");
 const searchInput = document.querySelector("#search-input");
 const emptyResults = document.querySelector("#empty-results");
+const collectionMore = document.querySelector("#collection-more");
+const productCount = document.querySelector("#product-count");
+const showMoreProducts = document.querySelector("#show-more-products");
+const exploreCategories = document.querySelector("#explore-categories");
 const cartDrawer = document.querySelector("#cart-drawer");
 const cartBackdrop = document.querySelector("#cart-backdrop");
 const cartItems = document.querySelector("#cart-items");
@@ -309,6 +313,8 @@ const chatPanel = document.querySelector("#chat-panel");
 const chatMessages = document.querySelector("#chat-messages");
 const chatInput = document.querySelector("#chat-input");
 let activeFilter = "Tout";
+const productPageSize = 8;
+let productLimit = productPageSize;
 let toastTimer;
 let selectedProduct = null;
 let selectedSize = "";
@@ -329,14 +335,31 @@ function renderProducts() {
   if (!productGrid) return;
 
   const query = searchInput.value.trim().toLocaleLowerCase("fr");
-  const visibleProducts = products.filter((product) => {
+  let visibleProducts = products.filter((product) => {
     const matchesCategory = activeFilter === "Tout"
       || (activeFilter === "Favoris" ? favorites.has(product.id) : product.category === activeFilter);
     const matchesSearch = `${product.name} ${product.category}`.toLocaleLowerCase("fr").includes(query);
     return matchesCategory && matchesSearch;
   });
 
-  productGrid.innerHTML = visibleProducts.map((product) => `
+  const isSelection = activeFilter === "Tout" && !query;
+  if (isSelection) {
+    const categories = new Map();
+    visibleProducts.forEach((product) => {
+      if (!categories.has(product.category)) categories.set(product.category, []);
+      categories.get(product.category).push(product);
+    });
+    const mixedProducts = [];
+    for (let index = 0; mixedProducts.length < visibleProducts.length; index += 1) {
+      categories.forEach((categoryProducts) => {
+        if (categoryProducts[index]) mixedProducts.push(categoryProducts[index]);
+      });
+    }
+    visibleProducts = mixedProducts;
+  }
+
+  const displayedProducts = visibleProducts.slice(0, productLimit);
+  productGrid.innerHTML = displayedProducts.map((product) => `
     <article class="product-card">
       <div class="product-visual${product.image ? " has-image" : ""}${product.imageFit === "contain" ? " image-contain" : ""}" style="--product-color:${product.color};--product-bg:${product.background};--skin:${product.skin}">
         ${product.image ? `<button class="product-image-trigger" type="button" data-product="${product.id}" aria-label="Voir la fiche de ${product.name}"><img class="product-photo" src="${product.image}" alt="" loading="lazy"></button>` : ""}
@@ -354,6 +377,11 @@ function renderProducts() {
     </article>
   `).join("");
 
+  collectionMore.hidden = visibleProducts.length === 0;
+  productCount.hidden = isSelection;
+  showMoreProducts.hidden = isSelection || displayedProducts.length >= visibleProducts.length;
+  exploreCategories.hidden = !isSelection;
+  productCount.textContent = `${displayedProducts.length} sur ${visibleProducts.length} articles`;
   emptyResults.hidden = visibleProducts.length !== 0;
   emptyResults.textContent = activeFilter === "Favoris" && favorites.size === 0
     ? "Vous n’avez pas encore d’article favori."
@@ -834,6 +862,7 @@ document.querySelectorAll("[data-filter]").forEach((button) => {
   button.addEventListener("click", (event) => {
     event.preventDefault();
     activeFilter = button.dataset.filter;
+    productLimit = productPageSize;
     document.querySelectorAll(".filter-button").forEach((filterButton) => {
       const selected = filterButton.dataset.filter === activeFilter;
       filterButton.classList.toggle("is-active", selected);
@@ -954,7 +983,16 @@ document.querySelector(".detail-tabs").addEventListener("click", (event) => {
   document.querySelector("#detail-tab-panel").textContent = panelContent[tab.dataset.detailTab];
 });
 
-searchInput.addEventListener("input", renderProducts);
+searchInput.addEventListener("input", () => {
+  productLimit = productPageSize;
+  renderProducts();
+});
+showMoreProducts.addEventListener("click", () => {
+  const previousCount = productGrid.children.length;
+  productLimit += productPageSize;
+  renderProducts();
+  productGrid.children[previousCount]?.querySelector("[data-product]")?.focus();
+});
 document.querySelector("#tracking-form").addEventListener("submit", async (event) => {
   event.preventDefault();
   const carrier = document.querySelector("#tracking-carrier").value;
